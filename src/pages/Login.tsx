@@ -21,7 +21,7 @@ function Login() {
        await AuthService.loginUser(form.email, form.password)
       console.log('login successfull')
       setMessage('login successfull')
-      login({email:form.email})
+      login({email:form.email, password:form.password})
       // Redirigir a otra pagina (ofertas)
     }catch(error){
       const msg = error instanceof Error ? error.message : 'Error desconocido'
