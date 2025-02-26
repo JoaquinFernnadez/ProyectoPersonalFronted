@@ -1,11 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-function Home() {
+function Home() { // Acabar la redireccion del click a la pagina correspondiente 
   const { user } = useAuth()
+  const navigate = useNavigate();
   const handleClick1 = () => {
-    window.location.href = '/components/R_Legal.js';
+    navigate('./Pokedex')
 }
+const handleClick2 = () => {
+  navigate('./Packs')
+}
+const handleClick3 = () => {
+  navigate('./TeamSelector')
+}
+const handleClick4 = () => {
+  navigate('./Myteam')
+}
+
 
   return (
     <div flex-wrap >
@@ -23,7 +34,7 @@ function Home() {
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">A realy good tool for user to see all pokemons and know what Pokemons still didnt appear. U Also can check 
             pokemon details of that pokemons u already have.
           </p>
-          <button  onClick={() => handleClick1}> </button>
+          <button  onClick={() => handleClick1()}> </button>
         </div>
       </div>
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
@@ -35,7 +46,7 @@ function Home() {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">PokePacks AbreTu</h5>
           </a>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here u can unlock new pokemons to build a stronger Team</p>
-          <button  onClick={() => handleClick1}> </button>
+          <button  onClick={() => handleClick2()}> </button>
         </div>
       </div>
       <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
@@ -47,7 +58,7 @@ function Home() {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Mis pokemons</h5>
           </a>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here you can see all your unlocked pokemons and also select what 6 pokemons are gonna be part of your team </p>
-          <button  onClick={() => handleClick1}> </button>
+          <button  onClick={() => handleClick3()}> </button>
         </div>
       </div>
       <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
@@ -59,7 +70,7 @@ function Home() {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Mi equipo</h5>
           </a>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Here you can see your 6 selected pokemons for your team</p>
-          <button  onClick={() => handleClick1}> </button>
+          <button  onClick={() => handleClick4()}> </button>
         </div>
       </div>
       </div>
