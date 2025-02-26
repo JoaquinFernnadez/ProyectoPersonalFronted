@@ -1,48 +1,81 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-import User from "../models/User";
+import { createContext, useContext, useEffect, useState } from "react";
+import { AuthService } from "../services/authService";
+
+const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
+
+interface UserPayload{
+    id: number
+    email: string
+    nameUSer: string
+}
+
 interface AuthContextType{
-    user: User | null
-    login: (user: User) =>void
-    logout: () => void
+    user: UserPayload | null  // Partial<User>
+    isAuthenticated: boolean
+    login: (email:string, password:string, username:string) =>  Promise<void>
+    logout: () =>  Promise<void>
 }
-const AuthContext = createContext<AuthContextType | undefined>(
-   {
+const AuthContext = createContext<AuthContextType | null>({ // Es mejor proporcionar un objeto vacío con funciones noop para evitar verificaciones innecesarias en useAuth()
     user: null,
-    login: () => {},
-    logout: () => {}
-   }
-)
+    isAuthenticated: false,
+    login: async () => {},
+    logout: async () => {},
+})
+
+export function AuthProvider({children}:{children: React.ReactNode}){
+    const [user, setUser] = useState<UserPayload | null>(null)
 
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-      throw new Error("useAuth debe ser usado dentro de un AuthProvider");
+    // Carga el contexto la primera vez que la app arranca
+    useEffect(()=>{
+        async function callBack(){
+            // obtengo los datos del backend y los guardo en el ctx
+            try{
+                const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
+                if (!response.ok) throw new Error("No autenticado");
+                const data = await response.json()
+                setUser(data)
+            }catch(error){
+                console.error('Error al cargar el usuario', error)
+                setUser(null)
+            }
+        }
+        callBack()
+    },[])
+
+    const login = async (email: string, password:string) => {
+        try{
+            const a = await AuthService.loginUser(email, password)
+            const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
+            if (!response.ok) throw new Error("No autenticado");
+            const data = await response.json()
+            console.log('Usuario logueado:', data)
+            console.log('Usuario logueado token:', a)
+            setUser(data)
+        }catch(error){
+            console.error("Error en el login:", error);
+            throw new Error("Error en el login")
+        }
     }
-    return context;
-  };
 
-interface AuthProviderWrapperProps {
-    children: ReactNode
-}
-function AuthProviderWrapper({children}:AuthProviderWrapperProps){
-    const [user, setUser] = useState(null)
+    const logout = async () => {
+        // conexión con el backend
+        await fetch(API_URL_BASE+'/auth/logout', {method:'POST', credentials: 'include'})
+        setUser(null)
+    }
 
-    const login = (userData: User) => {
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(userData)); // Persistencia opcional
-      };
-    
-      const logout = () => {
-        setUser(null);
-        localStorage.removeItem("user");
-      };
-
-    return (
-        <AuthContext.Provider value={{user, login, logout}}>
+    return <AuthContext.Provider value={  
+            {user, login, logout, isAuthenticated: !!user }
+        }>
             {children}
         </AuthContext.Provider>
-    )
 }
 
-export {AuthContext, AuthProviderWrapper}
+export function useAuth() {
+    const context = useContext(AuthContext)
+    if(!context) {
+        console.warn("useAuth se está usando fuera del AuthProvider");
+        return { user: null, isAuthenticated: false, isAdmin: false, login: () => {}, logout: () => {} };
+    }
+    return context
+}
