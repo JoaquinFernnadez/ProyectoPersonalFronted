@@ -12,14 +12,14 @@ interface UserPayload{
 interface AuthContextType{
     user: UserPayload | null  // Partial<User>
     isAuthenticated: boolean
-    login: (email:string, password:string, username:string) =>  Promise<void>
-    logout: () =>  Promise<void>
+    login: (email:string, password:string) =>  Promise<void>
+    
 }
 const AuthContext = createContext<AuthContextType | null>({ // Es mejor proporcionar un objeto vacío con funciones noop para evitar verificaciones innecesarias en useAuth()
     user: null,
     isAuthenticated: false,
     login: async () => {},
-    logout: async () => {},
+   
 })
 
 export function AuthProvider({children}:{children: React.ReactNode}){
@@ -31,7 +31,8 @@ export function AuthProvider({children}:{children: React.ReactNode}){
         async function callBack(){
             // obtengo los datos del backend y los guardo en el ctx
             try{
-                const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
+                const response = await fetch(API_URL_BASE+'/auth/login',
+                 {credentials: 'include', method: 'POST'})
                 if (!response.ok) throw new Error("No autenticado");
                 const data = await response.json()
                 setUser(data)
@@ -47,6 +48,7 @@ export function AuthProvider({children}:{children: React.ReactNode}){
         try{
             const a = await AuthService.loginUser(email, password)
             const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
+            console.log(response)
             if (!response.ok) throw new Error("No autenticado");
             const data = await response.json()
             console.log('Usuario logueado:', data)
@@ -58,14 +60,8 @@ export function AuthProvider({children}:{children: React.ReactNode}){
         }
     }
 
-    const logout = async () => {
-        // conexión con el backend
-        await fetch(API_URL_BASE+'/auth/logout', {method:'POST', credentials: 'include'})
-        setUser(null)
-    }
-
     return <AuthContext.Provider value={  
-            {user, login, logout, isAuthenticated: !!user }
+            {user, login, isAuthenticated: !!user }
         }>
             {children}
         </AuthContext.Provider>
@@ -75,7 +71,7 @@ export function useAuth() {
     const context = useContext(AuthContext)
     if(!context) {
         console.warn("useAuth se está usando fuera del AuthProvider");
-        return { user: null, isAuthenticated: false, isAdmin: false, login: () => {}, logout: () => {} };
+        return { user: null, isAuthenticated: false, isAdmin: false, login: () => {} };
     }
     return context
 }

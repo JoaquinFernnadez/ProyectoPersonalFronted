@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Pokemon from "../models/Pokemon";
 
+const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
   function Team() {
     const [userPokemons, setUserPokemons] = useState<Pokemon[]>([])
@@ -12,7 +13,7 @@ import Pokemon from "../models/Pokemon";
     useEffect(() => {
       const fetchUserPokemons = async () => {
         try {
-          const response = await fetch("http://localhost:4000/api/pokemon/desbloqueados", {
+          const response = await fetch(API_URL_BASE + "/pokemon/desbloqueados", {
             credentials: "include", 
           })
           const data = await response.json()
@@ -51,7 +52,7 @@ import Pokemon from "../models/Pokemon";
       }
   
       try {
-        const response = await fetch("http://localhost:4000/api/pokemon/guardarEquipo", {
+        const response = await fetch(API_URL_BASE + "/pokemon/desbloqueados/guardarEquipo", {
           method: "POST",
           credentials: "include",
           headers: {

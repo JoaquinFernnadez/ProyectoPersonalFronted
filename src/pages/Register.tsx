@@ -28,7 +28,7 @@ const Register: React.FC = () => {
       await AuthService.registerUser(form);
 
       toast.success("Usuario registrado con éxito!");
-      navigate("/offers");
+      navigate("/");
     } catch (error) {
       toast.error("Error al registrar el usuario.");
 
@@ -69,8 +69,8 @@ const Register: React.FC = () => {
 
   return (
     <form className="max-w-sm mx-auto min-w-sm" onSubmit={handleSubmit}>
-      <InputForm text="Nombre" name="name" value={form.name || ''} handleChange={handleChange} error={errors.name} />
-      <InputForm text="Apellidos" name="surname" value={form.surname || ''} handleChange={handleChange} error={errors.surname} />
+      <InputForm text="Nombre de Usuario" name="name" value={form.name || ''} handleChange={handleChange} error={errors.name} />
+      {/* <InputForm text="Apellidos" name="surname" value={form.surname || ''} handleChange={handleChange} error={errors.surname} /> */}
       <InputForm text="Email" name="email" value={form.email || ''} handleChange={handleChange} error={errors.email} />
       <InputForm text="Password" name="password" value={form.password || ''} handleChange={handleChange} error={errors.password} />
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Pokemon from "../models/Pokemon";
 
+const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 
 function Pokedex ()  {
@@ -11,7 +12,7 @@ function Pokedex ()  {
   useEffect(() => {
     const fetchPokedex = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/pokedex", {
+        const response = await fetch(API_URL_BASE + "/pokemon/pokedex", {
           method: "GET",
           credentials: "include",
         })
@@ -19,7 +20,7 @@ function Pokedex ()  {
         if (!response.ok) throw new Error("Error al obtener la Pokédex")
 
         const data: Pokemon[] = await response.json()
-        setPokemons(data)
+        setPokemons(data) 
       } catch (error) {
         setError("No se pudo cargar la Pokédex")
         console.error(error)

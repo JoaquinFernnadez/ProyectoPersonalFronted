@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Packs() {
       const [pokemons, setPokemons] = useState<string[]>([]);
@@ -9,7 +10,7 @@ function Packs() {
       const openPack = async () => {
         setIsLoading(true);
         try {
-          const response = await fetch("http://localhost:3000/api/pokemon/getNewPokemons", {
+          const response = await fetch(API_URL_BASE + "/pokemon/packs", {
             method: "GET",
             credentials: "include", // Para enviar cookies si hay autenticación
           });
