@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import Pokemon from "../models/Pokemon";
+import { useAuth } from "../contexts/AuthContext";
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
   function Team() {
+    const { user } = useAuth()
     const [userPokemons, setUserPokemons] = useState<Pokemon[]>([])
-    const [selectedPokemons, setSelectedPokemons] = useState<string[]>([])
+    const [selectedPokemons, setSelectedPokemons] = useState<number[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
   
@@ -13,32 +15,34 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
     useEffect(() => {
       const fetchUserPokemons = async () => {
         try {
-          const response = await fetch(API_URL_BASE + "/pokemon/desbloqueados", {
+          const response = await fetch(API_URL_BASE + `/pokemon/desbloqueados?id=${user?.id}`, {
             credentials: "include", 
           })
           const data = await response.json()
+          console.log(data)
           if (!response.ok) throw new Error(data.error || "Error al obtener Pokémon")
   
-          setUserPokemons(data.pokemons)
+          setUserPokemons(data)
         } catch (error) {
           const msg = error instanceof Error ? error.message : 'Error desconocido'
           setError(msg)
         } finally {
           setLoading(false)
         }
+       
       }
   
       fetchUserPokemons()
     }, [])
   
   
-    const handleSelectPokemon = (pokemonName: string) => {
-      if (selectedPokemons.includes(pokemonName)) {
+    const handleSelectPokemon = (pokemonId: number) => {
+      if (selectedPokemons.includes(pokemonId)) {
       
-        setSelectedPokemons(selectedPokemons.filter((name) => name !== pokemonName))
+        setSelectedPokemons(selectedPokemons.filter((id ) => id != pokemonId))
       } else if (selectedPokemons.length < 6) {
         
-        setSelectedPokemons([...selectedPokemons, pokemonName])
+        setSelectedPokemons([...selectedPokemons, pokemonId])
       } else {
         alert("Solo puedes seleccionar 6 Pokémon.")
       }
@@ -46,19 +50,20 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
    
     const saveTeam = async () => {
+      console.log(selectedPokemons)
       if (selectedPokemons.length !== 6) {
         alert("Debes seleccionar exactamente 6 Pokémon.");
         return
       }
   
       try {
-        const response = await fetch(API_URL_BASE + "/pokemon/desbloqueados/guardarEquipo", {
+        const response = await fetch(API_URL_BASE + `/pokemon/desbloqueados/guardarEquipo?id=${user?.id}`, {
           method: "POST",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ pokemons: selectedPokemons }),
+          body: JSON.stringify({ pokemonIds: selectedPokemons }),
         })
   
         const data = await response.json()
@@ -77,24 +82,24 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
     if (error) return <p className="text-center text-red-500">{error}</p>
   
     return (
-      <div className="flex flex-col items-center p-6">
+      <div className=" text-white flex flex-col items-center p-6">
         <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémon</h2>
   
         
         <div className="grid grid-cols-3 gap-4 mb-4">
-          {userPokemons.map((pokemon) => (
-            <div key={pokemon.id} className="flex flex-col items-center">
+          {userPokemons?.map((pokemon,index) => (
+            <div key={index} className="flex flex-col items-center">
               <img src={pokemon.sprite} alt={pokemon.name} className="w-24 h-24" />
               <p className="text-lg font-semibold">{pokemon.name}</p>
   
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  checked={selectedPokemons.includes(pokemon.name)}
-                  onChange={() => handleSelectPokemon(pokemon.name)}
+                  checked={selectedPokemons.includes(pokemon.id)}
+                  onChange={() => handleSelectPokemon(pokemon.id)}
                   className="w-5 h-5"
                 />
-                <span>{selectedPokemons.includes(pokemon.name) ? "Seleccionado" : "Seleccionar"}</span>
+                <span>{selectedPokemons.includes(pokemon.id) ? "Seleccionado" : "Seleccionar"}</span>
               </label>
             </div>
           ))}

@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import { Toaster } from "react-hot-toast";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 import { AuthProvider } from "./contexts/AuthContext";
 import Pokedex from "./pages/Pokedex";
@@ -35,7 +35,7 @@ function App() {
             </Routes>
           </div>
           <div className=" fixed bottom-0  w-full">
-          <Footer />
+          {/* <Footer /> */}
           </div>
         </div>
         </AuthProvider>
