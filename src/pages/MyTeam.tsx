@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Pokemon from "../models/Pokemon";
 import { useAuth } from "../contexts/AuthContext";
 
+
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 
