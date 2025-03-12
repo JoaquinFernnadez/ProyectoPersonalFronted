@@ -12,6 +12,9 @@ import Pokedex from "./pages/Pokedex";
 import Packs from "./pages/Packs";
 import UserTeam from "./pages/MyTeam";
 import Team from "./pages/TeamSelector";
+import ComplaintsList from "./pages/Complaints";
+import ComplaintsForm from "./pages/ComplaintForm";
+import UserList from "./pages/ListUsers";
 
 function App() {
 
@@ -32,6 +35,9 @@ function App() {
               <Route path="/packs" element={<Packs />} />
               <Route path="/myteam" element={<UserTeam />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/complaints" element={<ComplaintsList />} />
+              <Route path="/newComplaint" element={<ComplaintsForm />} />
+              <Route path="/users" element={<UserList />} />
             </Routes>
           </div>
           <div className=" fixed bottom-0  w-full">

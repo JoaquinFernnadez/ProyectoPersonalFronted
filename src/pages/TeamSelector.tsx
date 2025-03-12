@@ -86,7 +86,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
         <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémon</h2>
   
         
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className=" overflow-y-auto h-[600px]  grid grid-cols-3 gap-4 mb-4">
           {userPokemons?.map((pokemon,index) => (
             <div key={index} className="flex flex-col items-center">
               <img src={pokemon.sprite} alt={pokemon.name} className="w-24 h-24" />
