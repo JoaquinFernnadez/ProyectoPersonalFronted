@@ -8,13 +8,13 @@ function Home() { // Acabar la redireccion del click a la pagina correspondiente
 
   return (
     <div className="text-white flex-wrap ">
-      <h1 className="flex justify-center">Bienvenido a la aplicación</h1>
+      <h1 className="flex justify-center ">Bienvenido a PokeTu</h1>
       {user ? (<div className="flex flex-wrap justify-center text-white">
         <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <div className="p-5">
          
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pokedex</h5>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">A realy good tool for user to see all pokemons and know what Pokemons still didnt appear. U Also can check 
+          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">A realy good tool for users to see all pokemons and know what Pokemons still didnt appear. U Also can check 
             pokemon details of that pokemons u already have.
           </p>
           <button className="bg-blue-900 h-10 w-15 rounded" onClick={() => navigate('/pokedex')}>GO</button>

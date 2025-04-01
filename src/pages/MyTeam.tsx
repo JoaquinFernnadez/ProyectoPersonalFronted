@@ -18,13 +18,14 @@ function UserTeam() {
       try {
         const response = await fetch(API_URL_BASE+`/pokemon/verEquipo?id=${user?.id}`, {
           method: "GET",
-          credentials: "include", // Incluye cookies o tokens de sesión
+          credentials: "include", 
         })
 
         if (!response.ok) throw new Error("Error al obtener el equipo Pokémon")
 
         const data: Pokemon[] = await response.json()
         setTeam(data);
+        console.log(data)
 
       } catch (error) {
         setError("No se pudo cargar el equipo")
@@ -38,7 +39,7 @@ function UserTeam() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Mi Equipo Pokémon</h1>
+      <h1 className="text-3xl font-bold text-white text-center mb-6">Mi Equipo Pokémon</h1>
 
       {loading && <p className="text-center text-gray-500">Cargando equipo...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
@@ -47,7 +48,7 @@ function UserTeam() {
         {team.map((pokemon) => (
           <div key={pokemon.id} className="bg-gray-800 p-4 rounded-lg shadow-md text-center">
             <img src={pokemon.sprite}  className="w-24 h-24 mx-auto" />
-            <p className="text-white mt-2 font-semibold">{pokemon.name}</p>
+            <p className="text-white mt-2 font-semibold">{pokemon.pokemonName}</p>
           </div>
         ))}
       </div>

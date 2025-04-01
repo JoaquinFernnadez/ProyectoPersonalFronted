@@ -52,7 +52,26 @@ function Packs() {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h2 className="text-2xl font-bold mb-4 text-white">Abrir un Sobre de Pokémon</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Hazte con todos</h2>
+
+      
+
+      {pokemons?.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {pokemons.map((pokemon, index) => (
+            <div
+              key={index}
+              className="bg-gray-800 p-4 rounded-lg shadow-md text-center"
+            >
+              <img
+                src={pokemon.sprites.front_default}
+                alt={pokemon.name}
+              />
+              <p className="text-white mt-2 font-semibold">{pokemon.name}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Botón para abrir un sobre */}
       <button
@@ -62,22 +81,6 @@ function Packs() {
       >
         {isLoading ? "Abriendo..." : "Abrir Sobre"}
       </button>
-
-      {pokemons?.length > 0 && (
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          {pokemons.map((pokemon, index) => (
-            <div
-              key={index}
-              className="p-4 bg-gray-200 rounded-lg text-center text-lg font-semibold"
-            >
-              <img
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name}
-              />
-            </div>
-          ))}
-        </div>
-      )}
 
     </div>
   )

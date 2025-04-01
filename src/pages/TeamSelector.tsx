@@ -83,7 +83,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
     return (
       <div className=" text-white flex flex-col items-center p-6">
-        <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémon</h2>
+        <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémons</h2>
   
         
         <div className=" overflow-y-auto h-[600px]  grid grid-cols-3 gap-4 mb-4">
@@ -97,7 +97,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
                   type="checkbox"
                   checked={selectedPokemons.includes(pokemon.id)}
                   onChange={() => handleSelectPokemon(pokemon.id)}
-                  className="w-5 h-5"
+                    className="appearance-none w-5 h-5 rounded-full border-2 border-gray-500 checked:bg-green-500 checked:border-green-500 focus:ring-2 focus:ring-green-300"
                 />
                 <span>{selectedPokemons.includes(pokemon.id) ? "Seleccionado" : "Seleccionar"}</span>
               </label>

@@ -1,4 +1,5 @@
 export default interface Pokemon{
+    pokemonName?: string
     sprites: {
         front_default: string
     }
@@ -7,5 +8,4 @@ export default interface Pokemon{
     sprite: string
     unlocked?: boolean
     url : string 
-
 } 
