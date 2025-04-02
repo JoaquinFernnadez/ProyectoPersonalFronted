@@ -57,10 +57,6 @@ const Register: React.FC = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleChangeCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
-    const { checked, name } = e.target;
-    setForm({ ...form, [name]: checked });
-  };
 
   if (loading) return <p>Loading...</p>;
 
@@ -72,24 +68,8 @@ const Register: React.FC = () => {
       <InputForm text="Password" name="password" value={form.password || ''} handleChange={handleChange} error={errors.password} />
 
       <div className="flex items-start mb-5">
-        <div className="flex items-center h-5">
-          <input
-            id="acceptNotifications"
-            name="accepNotifications"
-            type="checkbox"
-            value={form.accepNotifications ? "on" : "off"}
-            onChange={handleChangeCheckbox}
-            className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-          />
-        </div>
-
-        <label
-          htmlFor="remember"
-          className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >
-          Aceptas recibir notificaciones?
-        </label>
-        {errors.accepNotifications && <p className="mt-2 text-sm text-red-600 dark:text-red-500"> {errors.accepNotifications}</p>}
+        
+        
 
       </div>
       {errors && errors.message && <p className="text-center mt-4 text-red-500">{errors.message}</p>}
