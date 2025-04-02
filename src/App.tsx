@@ -26,7 +26,7 @@ function App() {
         <div className="flex flex-col">
           <Navbar />
           <Toaster position="top-center" reverseOrder={false} /> 
-          <div className="flex-grow flex justify-center items-center   ">
+          <div className="flex-grow flex justify-center items-center bg-gray-900">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />

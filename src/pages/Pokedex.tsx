@@ -77,11 +77,9 @@ function Pokedex ()  {
   }
 
   const getId = async (url: string) => {
-    console.log(url + " url")
     const response = await fetch(url)
   
     const data = await response.json() as Partial<PokemonDetails>
-    console.log(data)
     return data.id
     
   }
@@ -100,8 +98,8 @@ function Pokedex ()  {
   }
  
   return (
-    <div className="max-w-5xl mx-auto p-6 flex flex-col">
-      {<h1 className="text-6xl text-white font-bold text-center mb-6">Pokédex  Página {page} </h1>}
+    <div className="max-w-5xl mx-auto p-6 flex flex-col ">
+      {<h1 className="text-6xl text-red-700 font-bold text-center mb-6">Pokédex  Página {page} </h1>}
 
       {loading && <p className="text-center text-gray-500">Cargando Pokédex...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
@@ -122,7 +120,7 @@ function Pokedex ()  {
             <button
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
               onClick={() => fetchPokemonDetails(pokemon.url)}
-              disabled={!pokemon.unlocked}
+              
             >
               Ver detalles
             </button>
@@ -131,8 +129,8 @@ function Pokedex ()  {
         ))}
       </div>
       {selectedPokemon && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className=" bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 bg-black/60  flex justify-center items-center">
+          <div className=" bg-white/85 p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-2xl font-bold">{(selectedPokemon.name).toUpperCase()}</h2>
             <p>Altura: {selectedPokemon.height } dm</p>
             <p>Peso: {selectedPokemon.weight} hg</p>

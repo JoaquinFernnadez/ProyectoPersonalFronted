@@ -9,10 +9,8 @@ import InputForm from "../components/InputForm";
 const Register: React.FC = () => {
   const [form, setForm] = useState<Partial<User>>({
     name: "",
-    surname: "",
     email: "",
     password: "",
-    course: "",
     accepNotifications: false,
   });
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
