@@ -3,6 +3,7 @@ export default interface PokemonDetails {
     name: string
     height: number
     weight: number
+    sprite: string
     types: string[]
     abilities: string[]
     stats: { stat: string ; base_stat: number} []

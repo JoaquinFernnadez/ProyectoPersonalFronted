@@ -1,12 +1,12 @@
 import {  useState } from "react"
-import Pokemon from "../models/Pokemon";
 import { useAuth } from "../contexts/AuthContext";
+import SalidaDatabase from "../models/PokemonFDB";
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Packs() {
   const { user } = useAuth()
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [pokemons, setPokemons] = useState<SalidaDatabase[]>([]);
   // const [sprite , setSprite] = useState <string[]>([])
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,10 +64,10 @@ function Packs() {
               className="bg-gray-800 p-4 rounded-lg shadow-md text-center"
             >
               <img
-                src={pokemon.sprites.front_default}
-                alt={pokemon.name}
+                src={pokemon.sprite}
+                alt={pokemon.pokemon.name}
               />
-              <p className="text-white mt-2 font-semibold">{pokemon.name}</p>
+              <p className="text-white mt-2 font-semibold">{pokemon.pokemon.name}</p>
             </div>
           ))}
         </div>

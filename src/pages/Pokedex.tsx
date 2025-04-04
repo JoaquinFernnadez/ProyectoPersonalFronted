@@ -21,7 +21,7 @@ function Pokedex ()  {
   
   useEffect(() => {
     const fetchPokedex = async () => {
-      
+      setLoading(true)
       setSprites([])
      
       try {
