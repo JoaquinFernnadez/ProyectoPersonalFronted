@@ -19,7 +19,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
             credentials: "include", 
           })
           const data = await response.json()
-          console.log(data)
+          
           if (!response.ok) throw new Error(data.error || "Error al obtener Pokémon")
   
           setUserPokemons(data)
@@ -50,7 +50,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
    
     const saveTeam = async () => {
-      console.log(selectedPokemons)
+      
       if (selectedPokemons.length !== 6) {
         alert("Debes seleccionar exactamente 6 Pokémon.");
         return
@@ -82,6 +82,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
     if (error) return <p className="text-center text-red-500">{error}</p>
   
     return (
+      <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
       <div className=" text-white flex flex-col items-center p-6">
         <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémons</h2>
   
@@ -113,6 +114,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
         >
           Guardar Equipo
         </button>
+      </div>
       </div>
     )
   }

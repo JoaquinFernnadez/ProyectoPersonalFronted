@@ -1,4 +1,4 @@
-import {  useState } from "react"
+import { useState } from "react"
 import { useAuth } from "../contexts/AuthContext";
 import SalidaDatabase from "../models/PokemonFDB";
 
@@ -29,11 +29,11 @@ function Packs() {
       }
 
       const data = await response.json();
-    
-      
-      setPokemons(data); // Recibe un array de nombres de Pokémon
-      //reload = reload * -1
-      
+
+
+      setPokemons(data);
+      console.log(data)
+
     } catch (error) {
       console.error("Error al abrir el sobre:", error);
     } finally {
@@ -42,19 +42,14 @@ function Packs() {
     }
 
   };
-  /*
-  useEffect(() => {
 
-
-  }, [reload])
-*/
 
 
   return (
-    <div className="flex flex-col items-center p-6">
+    <div className="flex flex-col items-center p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
       <h2 className="text-2xl font-bold mb-4 text-white">Hazte con todos</h2>
 
-      
+
 
       {pokemons?.length > 0 && (
         <div className="grid grid-cols-3 gap-4 mb-4">
@@ -65,9 +60,9 @@ function Packs() {
             >
               <img
                 src={pokemon.sprite}
-                alt={pokemon.pokemon.name}
+                alt={pokemon.name}
               />
-              <p className="text-white mt-2 font-semibold">{pokemon.pokemon.name}</p>
+              <p className="text-white mt-2 font-semibold">{pokemon.name}</p>
             </div>
           ))}
         </div>

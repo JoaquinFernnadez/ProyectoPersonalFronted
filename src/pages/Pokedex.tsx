@@ -98,6 +98,7 @@ function Pokedex ()  {
   }
  
   return (
+    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950  w-screen h-full" >
     <div className="max-w-5xl mx-auto p-6 flex flex-col ">
       {<h1 className="text-6xl text-red-700 font-bold text-center mb-6">Pokédex  Página {page} </h1>}
 
@@ -182,7 +183,7 @@ function Pokedex ()  {
         </button>
       </div>
     </div>
-    
+    </div>
   )
 }
 

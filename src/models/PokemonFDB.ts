@@ -1,6 +1,7 @@
 
 export default interface SalidaDatabase {
     id: number
+    name?: string 
     isTeam: boolean
     pokemon: PokemonDetails2
     pokemonName: string
@@ -23,8 +24,8 @@ export interface Stats {
     hp: number
     attack: number
     defense: number
-    special_atk: number
-    special_dfs: number
+    "special-attack": number
+    "special-defense": number
     speed: number
 }
 
