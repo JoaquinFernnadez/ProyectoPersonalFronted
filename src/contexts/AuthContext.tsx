@@ -13,13 +13,13 @@ interface AuthContextType{
     user: UserPayload | null  // Partial<User>
     isAuthenticated: boolean
     login: (email:string, password:string) =>  Promise<void>
-    
+    logout: () =>  Promise<void>
 }
 const AuthContext = createContext<AuthContextType | null>({ // Es mejor proporcionar un objeto vacío con funciones noop para evitar verificaciones innecesarias en useAuth()
     user: null,
     isAuthenticated: false,
     login: async () => {},
-   
+    logout: async () => {}
 })
 
 export function AuthProvider({children}:{children: React.ReactNode}){
@@ -59,9 +59,13 @@ export function AuthProvider({children}:{children: React.ReactNode}){
             throw new Error("Error en el login")
         }
     }
+    const logout = async () => {
+        await fetch(API_URL_BASE+'/auth/logout', {method:'POST', credentials: 'include'})
+        setUser(null)
+    }
 
     return <AuthContext.Provider value={  
-            {user, login, isAuthenticated: !!user }
+            {user, login, logout, isAuthenticated: !!user }
         }>
             {children}
         </AuthContext.Provider>
@@ -71,7 +75,7 @@ export function useAuth() {
     const context = useContext(AuthContext)
     if(!context) {
         console.warn("useAuth se está usando fuera del AuthProvider");
-        return { user: null, isAuthenticated: false, isAdmin: false, login: () => {} };
+        return { user: null, isAuthenticated: false, logout: () => {}, login: () => {} };
     }
     return context
 }

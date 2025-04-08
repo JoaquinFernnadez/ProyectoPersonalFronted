@@ -39,12 +39,12 @@ export default function ComplaintsList() {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto mt-10 p-5  bg-orange-200 shadow-lg rounded-lg flex flex-col items-center">
       <h2 className="text-2xl font-bold mb-4 text-center">Lista de Quejas</h2>
       {complaints.length === 0 ? (
-        <p className="text-gray-500 text-center">No hay quejas registradas.</p>
+        <p className="text-gray-500 text-center py-10">No hay quejas registradas.</p>
       ) : (
-        <ul className="divide-y divide-gray-300">
+        <ul className="divide-y divide-gray-300 pb-5">
           {complaints.map((complaint, index) => (
             <li key={index} className="p-4 hover:bg-gray-100 rounded-md">
               <p className="text-lg font-semibold">{complaint.titulo || "Sin título"}</p>
@@ -53,7 +53,7 @@ export default function ComplaintsList() {
           ))}
         </ul>
       )}
-        <button className="bg-blue-900 h-15 w-30 rounded"    onClick={() => navigate('/newComplaint')}>Nueva Queja</button>
+        <button className="bg-green-700 h-10 w-30  rounded"    onClick={() => navigate('/newComplaint')}>Nueva Queja</button>
     </div>
   );
 }

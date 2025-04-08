@@ -7,14 +7,14 @@ function Home() {
 
 
   return (
-    <div className="text-white flex-wrap bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950">
+    <div className="text-white flex-wrap bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-400 w-screen">
       <h1 className="flex text-blue-400 py-18 justify-center text-6xl">Bienvenido a PokeTu</h1>
       
       {user ? (<div className="flex flex-wrap justify-center  px-20 text-white">
-        <div className="max-w-sm  border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
-        <div className="p-5   rounded ">
+        <div className="max-w-sm   rounded-lg shadow-sm  dark:border-gray-700">
+        <div className="p-5    rounded ">
           <img src="src/images/pokedex.jpeg" className="rounded h-55"/>
-            <h5 className="mb-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-blue-400">Pokedex</h5>
+            <h5 className="mb-2 text-2xl text-center font-bold  tracking-tight text-gray-900 dark:text-blue-400">Pokedex</h5>
           <p className="mb-3 font-normal text-gray-700 dark:text-green-300">A realy good tool for users to see all pokemons and know what Pokemons still didnt appear. U also can check 
             pokemon details of that pokemons u already have.
           </p>
@@ -62,10 +62,12 @@ function Home() {
       </div>
       </div>
       ) : (
+       
         <div className="text-center text-2xl " >
-          <p>¡No estás autenticado!</p>
+          <p className="text-red-700 py-4">¡No estás autenticado!</p>
           <Link to="/login">Iniciar sesión</Link> | <Link to="/register">Registrarse</Link>
         </div>
+        
       )}
     </div>
   )

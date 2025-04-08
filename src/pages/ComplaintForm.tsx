@@ -37,9 +37,9 @@ export default function ComplaintsForm() {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg">
+    <div className="max-w-lg mx-auto mt-10 p-5 bg-orange-200 shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-4 text-center">Nueva Queja</h2>
-      {message && <p className="text-center text-red-500">{message}</p>}
+      {message && <p className="text-center text-green-500">{message}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-semibold">Título:</label>
