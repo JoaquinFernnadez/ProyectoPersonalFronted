@@ -94,25 +94,23 @@ function UserList() {
         {message}
         <table className="w-200 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+           
             <tr>
+
               <th scope="col" className="px-6 py-3">
                 ID
               </th>
               <th scope="col" className="px-6 py-3">
                 Nombre
               </th>
-
               <th scope="col" className="px-6 py-3">
                 MaxLevel
               </th>
-
-
               <th scope="col" className="px-6 py-3 ">
                 PokePuntos
               </th>
 
             </tr>
-
 
           </thead>
           <tbody>
