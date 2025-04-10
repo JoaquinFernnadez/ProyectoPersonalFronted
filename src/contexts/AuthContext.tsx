@@ -26,10 +26,10 @@ export function AuthProvider({children}:{children: React.ReactNode}){
     const [user, setUser] = useState<UserPayload | null>(null)
 
 
-    // Carga el contexto la primera vez que la app arranca
+    
     useEffect(()=>{
         async function callBack(){
-            // obtengo los datos del backend y los guardo en el ctx
+            
             try{
                 const response = await fetch(API_URL_BASE+'/auth/login',
                  {credentials: 'include', method: 'POST'})

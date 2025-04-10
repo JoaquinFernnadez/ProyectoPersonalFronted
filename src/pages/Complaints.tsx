@@ -8,9 +8,10 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 export default function ComplaintsList() {
     const { user } = useAuth();
     const navigate = useNavigate();
-  const [complaints, setComplaints] = useState<Complaint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null as string | null);
+
+    const [error, setError] = useState(null as string | null);
+    const [loading, setLoading] = useState(true);
+    const [complaints, setComplaints] = useState<Complaint[]>([]);
 
   useEffect(() => {
     const fetchComplaints = async () => {

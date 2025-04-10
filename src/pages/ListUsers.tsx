@@ -7,10 +7,10 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 function UserList() {
 
   const [users, setUsers] = useState<User[]>([])
+  const [orden, setOrden] = useState("desc")
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
   const [criterioOrden, setCriterioOrden] = useState('maxLevel')
-  const [orden, setOrden] = useState("desc")
 
   useEffect(() => {
     async function fetchUsers() {

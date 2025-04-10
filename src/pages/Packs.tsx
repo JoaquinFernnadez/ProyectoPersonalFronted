@@ -6,17 +6,15 @@ import  UserService  from "../services/userService";
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Packs() {
+  
   const { user } = useAuth()
-  const [pokemons, setPokemons] = useState<SalidaDatabase[]>([])
+  
   // const [sprite , setSprite] = useState <string[]>([])
+  const [pokemons, setPokemons] = useState<SalidaDatabase[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [pokePuntos, setPokePuntos] = useState(0)
 
-  //let reload = 1
-
-  // Función para abrir un sobre
-
-  const openPack = async () => {
+    const openPack = async () => {
     setIsLoading(true);
     setPokemons([])
 

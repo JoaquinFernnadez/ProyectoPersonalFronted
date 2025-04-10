@@ -11,9 +11,10 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function UserTeam() {
   const { user } = useAuth()
+  
   const [team, setTeam] = useState<Pokemon[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
  
   useEffect(() => {

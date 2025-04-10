@@ -12,31 +12,29 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Game() {
   const { user } = useAuth();
-  const UserId: number = user?.id || 0
-  const [userPokemons, setUserPokemons] = useState<SalidaDatabase[]>([])
-  const [aiPokemons, setAiPokemons] = useState<PokemonDetails[]>([])
-  const [level, setLevel] = useState(1)
-  const [selectedStat, setSelectedStat] = useState<string>("");
-  const [userScore, setUserScore] = useState<number>(0);
-  const [aiScore, setAiScore] = useState<number>(0);
-  const [round, setRound] = useState<number>(1);
-  const [win, setWin] = useState<boolean | null>(null)
-  const [selectedStatIndex, setSelectedStatIndex] = useState<number>(0)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
-  const [jugar, setJugar] = useState<boolean>(false)
-  const [loadingTeams, setLoadingTeams] = useState<boolean>(false)
-  const [seeInformation, setSeeInformation] = useState<boolean>(false)
-
   const navigate = useNavigate()
-
+  const UserId: number = user?.id || 0
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
-
   const setStatsWasted = new Set()
+  
+  const [win, setWin] = useState<boolean | null>(null)
+  const [level, setLevel] = useState(1)
+  const [round, setRound] = useState<number>(1);
+  const [jugar, setJugar] = useState<boolean>(false)
+  const [aiScore, setAiScore] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [userScore, setUserScore] = useState<number>(0);
+  const [aiPokemons, setAiPokemons] = useState<PokemonDetails[]>([])
+  const [loadingTeams, setLoadingTeams] = useState<boolean>(false)
+  const [userPokemons, setUserPokemons] = useState<SalidaDatabase[]>([])
+  const [selectedStat, setSelectedStat] = useState<string>("");
+  const [seeInformation, setSeeInformation] = useState<boolean>(false)
+  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
+  const [selectedStatIndex, setSelectedStatIndex] = useState<number>(0)
+
 
   const fetchTeams = async () => {
-    setLoadingTeams(true)
     stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
     try {
       if (userPokemons.length < 6) {
@@ -53,14 +51,17 @@ function Game() {
       setLevel(await PokemonService.getUserLevel(user?.id))
     } catch (error) {
       console.error("Error al cargar los equipos", error)
-    } finally {
-      setLoadingTeams(false)
     }
   }
-
+  const loadWithMinDelay = async () => {
+    const minDelay = new Promise(resolve => setTimeout(resolve, 2000))
+    setLoadingTeams(true)
+    await Promise.all([fetchTeams(), minDelay])
+    setLoadingTeams(false)
+  }
   useEffect(() => {
 
-    fetchTeams()
+    loadWithMinDelay()
   }, [])
 
   const getRandomStat = () => {
@@ -178,7 +179,7 @@ function Game() {
     <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
       <div className="game-container text-white ">
         {(!loading && !loadingTeams) ? (
-          <div>
+          <div className="">
             <h1 className="text-center py-5">¡Bienvenido al Juego Pokémon! Estas en el nivel {level}</h1>
             <div className="flex justify-end" >
               <button className="pr-10" ref={buttonRef} onClick={() => abrirInfo()}>
@@ -213,7 +214,9 @@ function Game() {
             </div>
 
             <div className="team">
+              <p className="text-right text-red-400 px-80">Puntuación del Rival: {aiScore}</p>
               <h2 className="text-center text-red-400 text-4xl py-4">Equipo rival</h2>
+
               <div className="pokemon-list flex justify-center gap-4 flex-wrap">
                 {aiPokemons.map((pokemon) => (
                   <div key={pokemon.sprite} className="pokemon-card text-center">
@@ -221,7 +224,7 @@ function Game() {
                   </div>
                 ))}
               </div>
-              <p className="text-right text-red-400 px-80">Puntuación del Rival: {aiScore}</p>
+
             </div>
 
             {selectedPokemon && (
@@ -250,14 +253,14 @@ function Game() {
                   initial={{
                     scale: 0.2,
                     opacity: 0,
-                    originX: buttonPosition?.left, 
-                    originY: buttonPosition?.top, 
+                    originX: buttonPosition?.left,
+                    originY: buttonPosition?.top,
                   }}
                   animate={{
                     scale: 1,
                     opacity: 1,
                     originX: 0,
-                    originY: 0, 
+                    originY: 0,
                   }}
                   exit={{
                     scale: 0.2,
@@ -343,6 +346,7 @@ function Game() {
               />
 
               <p className="text-xl mb-4 py-5 text-blue-400">Cargando nivel...</p>
+              <p className="text-xl mb-4  text-blue-400">(Boton de informacion arriba a la derecha)</p>
 
               { /* God Animacion */}
               <div className="flex justify-center items-center space-x-4 mb-4 pt-5">

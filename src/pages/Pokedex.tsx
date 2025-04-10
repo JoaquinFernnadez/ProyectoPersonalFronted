@@ -10,12 +10,13 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Pokedex ()  {
   const {user} = useAuth()
-  const [pokemons, setPokemons] = useState <Pokemon[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState("");
+  const [offset, setOffset] = useState(0);
   const [sprite, setSprites] = useState <string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
-  const [offset, setOffset] = useState(0);
+  const [pokemons, setPokemons] = useState <Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
 
 
