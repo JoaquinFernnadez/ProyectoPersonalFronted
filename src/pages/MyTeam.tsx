@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Pokemon from "../models/Pokemon";
 import { useAuth } from "../contexts/AuthContext";
 import PokemonDetails from "../models/PokemonDetails";
+import  PokemonService  from "../services/pokemonService";
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -13,7 +14,7 @@ function UserTeam() {
   const [team, setTeam] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-    const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
  
   useEffect(() => {
     const fetchUserTeam = async () => {
@@ -26,8 +27,7 @@ function UserTeam() {
         if (!response.ok) throw new Error("Error al obtener el equipo Pokémon")
 
         const data: Pokemon[] = await response.json()
-        setTeam(data);
-        console.log(data)
+        setTeam(data)
 
       } catch (error) {
         setError("No se pudo cargar el equipo")
@@ -37,19 +37,7 @@ function UserTeam() {
       }
     }
     fetchUserTeam()
-  }, [])
-
-  const fetchPokemonDetails = async (id: number) => {
-    try {
-      const response = await fetch(`${API_URL_BASE}/pokemon/getDetail?id=${id}`);
-      if (!response.ok) throw new Error("Error al obtener detalles del Pokémon");
-      const data = await response.json();
-      setSelectedPokemon(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
- 
+  }, [user?.id])
 
   return (
     <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
@@ -66,12 +54,11 @@ function UserTeam() {
             <p className="text-white mt-2 font-semibold">{pokemon.pokemonName}</p>
             <button
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-              onClick={() => fetchPokemonDetails(pokemon.id)}
+              onClick={async () =>setSelectedPokemon( await PokemonService.fetchPokemonDetails(pokemon.id))}
             >
               Ver detalles
             </button>
           </div>
-          
         ))}
       </div>
       {selectedPokemon && (
@@ -117,10 +104,10 @@ function UserTeam() {
       )}
     </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserTeam;
+export default UserTeam
 
 
 

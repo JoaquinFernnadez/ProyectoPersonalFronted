@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PokemonDetails from "../models/PokemonDetails";
 import { useAuth } from "../contexts/AuthContext";
 import SalidaDatabase, { PokemonDetails2 } from "../models/PokemonFDB";
 import { useNavigate } from "react-router-dom";
-import { UserService } from "../services/userService";
-import { PokemonService } from "../services/pokemonService";
+import UserService from "../services/userService";
+import PokemonService from "../services/pokemonService";
+import { AnimatePresence, motion } from "framer-motion";
 
 let stats: string[] = [];
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -25,9 +26,12 @@ function Game() {
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
   const [jugar, setJugar] = useState<boolean>(false)
   const [loadingTeams, setLoadingTeams] = useState<boolean>(false)
-  const [seeInformation,setSeeInformation] = useState<boolean>(false)
+  const [seeInformation, setSeeInformation] = useState<boolean>(false)
 
   const navigate = useNavigate()
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
 
   const setStatsWasted = new Set()
 
@@ -72,15 +76,15 @@ function Game() {
   const handleSelectedPokemon = async (userPokemon: SalidaDatabase) => {
 
     const pokemon: PokemonDetails2 = userPokemon.pokemon
-    const userChoice = await getUserValue(pokemon)
+    const userChoice = getUserValue(pokemon)
     const aiPokemon = AiSelection()
     const aiChoice = aiPokemon.stats[selectedStatIndex].base_stat
 
     if (userChoice > aiChoice) setUserScore(userScore + 1)
     else if (userChoice < aiChoice) setAiScore(aiScore + 1)
     else if (userChoice == aiChoice) {
-      const TBSUser = getTBS2(pokemon)
-      const TBSAi = getTBS(aiPokemon)
+      const TBSUser = PokemonService.getTBS2(pokemon)
+      const TBSAi = PokemonService.getTBS(aiPokemon)
       if (TBSUser > TBSAi) setUserScore(userScore + 1)
       else {
         setAiScore(aiScore + 1)
@@ -96,8 +100,8 @@ function Game() {
     setSelectedStat("")
     setJugar(false)
   }
-  const getUserValue = async (pokemon: PokemonDetails2) => {
-    const stats = await PokemonService.getArrayFromStats(pokemon)
+  const getUserValue = (pokemon: PokemonDetails2) => {
+    const stats = PokemonService.getArrayFromStats(pokemon)
 
     return stats[selectedStatIndex]
   }
@@ -123,7 +127,7 @@ function Game() {
 
 
     if (win == true) {
-      const message = await fetch(API_URL_BASE + `/user/actualizarlvl?id=${UserId}`, {
+      await fetch(API_URL_BASE + `/user/actualizarlvl?id=${UserId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -131,12 +135,11 @@ function Game() {
         body: JSON.stringify({ level: level + 1 }),
         credentials: 'include'
       })
-      console.log(message, "mensaje del res.status del backend")
 
       UserService.actualizarPokePuntos(UserId, [0, level])
 
-    } if (win == false) {
-      const message = await fetch(API_URL_BASE + `/user/actualizarlvl?id=${UserId}`, {
+    } else {
+      await fetch(API_URL_BASE + `/user/actualizarlvl?id=${UserId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -144,24 +147,8 @@ function Game() {
         body: JSON.stringify({ level: 0 }),
         credentials: 'include'
       })
-      console.log(message, "mensaje del res.status del backend")
+
     }
-
-
-
-  }
-
-
-  const getTBS = (pokemon: PokemonDetails) => {
-    let TBS = 0
-    for (let i = 0; i < 6; i++) {
-      TBS += pokemon.stats[i].base_stat
-    }
-    return TBS
-  }
-  const getTBS2 = (pokemon: PokemonDetails2) => {
-    const TBS = pokemon.stats.attack + pokemon.stats.defense + pokemon.stats.hp + pokemon.stats["special-attack"] + pokemon.stats["special-defense"] + pokemon.stats.speed
-    return TBS
   }
 
   const handleExit = () => {
@@ -179,26 +166,22 @@ function Game() {
     setTimeout(async () => await fetchTeams(), 1000)
     setLoading(false)
   }
-  const fetchPokemonDetails = async (id: number) => {
-    try {
-      const response = await fetch(`${API_URL_BASE}/pokemon/getDetail?id=${id}`);
-      if (!response.ok) throw new Error("Error al obtener detalles del Pokémon");
-      const data = await response.json();
-      setSelectedPokemon(data)
-
-
-    } catch (error) {
-      console.error(error);
+  const abrirInfo = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setButtonPosition({ top: rect.top, left: rect.left });
     }
-  }
+    setSeeInformation(true);
+  };
+
   return (
     <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
       <div className="game-container text-white ">
         {(!loading && !loadingTeams) ? (
           <div>
             <h1 className="text-center py-5">¡Bienvenido al Juego Pokémon! Estas en el nivel {level}</h1>
-            <div className="flex justify-end" onClick={() => setSeeInformation(true)}>
-              <button className="pr-10">
+            <div className="flex justify-end" >
+              <button className="pr-10" ref={buttonRef} onClick={() => abrirInfo()}>
                 <img className="rounded-full w-10 h-10" src="src/images/infoIcon.jpg"></img>
               </button>
             </div>
@@ -208,7 +191,7 @@ function Game() {
                 <div className="pokemon-list flex justify-center gap-4 flex-wrap">
                   {userPokemons.map((pokemon) => (
                     <div key={pokemon.id} className="pokemon-card text-center">
-                      <button className="py-3 " onClick={() => fetchPokemonDetails(pokemon.id)}>
+                      <button className="py-3 " onClick={async () => setSelectedPokemon(await PokemonService.fetchPokemonDetails(pokemon.id))}>
                         <img src={pokemon.sprite} alt={pokemon.pokemon.name} className="w-24 h-24" />
                       </button>
                       <h1></h1>
@@ -260,38 +243,66 @@ function Game() {
                 </div>
               </div>
             )}
-            {seeInformation && (
-              <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
-                <div className="bg-white/85 p-6 text-black rounded-lg shadow-lg w-100">
-                  <p className="text-3xl text-center pb-3 font-black">Game Info</p>
-                  <div> 
-                    <p className="text-xl font-black pb-2">¿Que puedo hacer con mi equipo?</p>
-                    <p>En esta panatalla puedes observar en la parte superior tu equipo pokemon con 2 funcionalidades.
-                    Al clickar sobre tus pokemons podras ver su informacion, ademas, debajo de cada uno hay un boton choose 
-                    que te permite seleccionar en cada ronda al pokemon que desees.
-                    </p>
-                    <p className="text-xl font-black pb-2">¿Como se juega?</p>
-                    <p>Para jugar presione el boton de Play y se elegira una estadística aleatoria. Luego elige el pokemon 
-                      que quieras para esa ronda con el boton choose.
-                    </p>
-                    <p className="text-xl font-black py-2">Sistema de juego: </p>
-                    <p>Cada nivel se basa en un sistema BO3 (esto quiere decir que no siempre se jugaran las 3 rondas) y el ganador de 
-                      cada ronda se decide en funcion de el valor más alto de la estadística del pokemon que escojas y el escogido por la IA y, en 
-                      caso de empate, se decidirá en base al TBS (suma de todas las stats) de los pokemons escogidos. 
-                    </p>
-                    <p className="text-xl font-black pb-2">Recompensas: </p>
-                    <p>Superar un nivel te dara una cantidad de PokePuntos igual al nivel superado. Puedes usar estos PokePuntos 
-                      para abrir mas sobres y mejorar tu equipo. </p>
+            <AnimatePresence>
+              {seeInformation && buttonPosition && (
+                <motion.div
+                  className="fixed inset-0 bg-black/60 flex justify-center items-center z-50"
+                  initial={{
+                    scale: 0.2,
+                    opacity: 0,
+                    originX: buttonPosition?.left, 
+                    originY: buttonPosition?.top, 
+                  }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                    originX: 0,
+                    originY: 0, 
+                  }}
+                  exit={{
+                    scale: 0.2,
+                    opacity: 0,
+                    x: buttonPosition?.left,
+                    y: buttonPosition?.top
+                  }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="bg-white/85 p-6 text-black rounded-lg shadow-lg w-full max-w-2xl">
+                    <p className="text-3xl text-center pb-3 font-black">Game Info</p>
+                    <div>
+                      <p className="text-xl font-black pb-2">¿Que puedo hacer con mi equipo?</p>
+                      <p>
+                        En esta panatalla puedes observar en la parte superior tu equipo pokemon con 2 funcionalidades. Al clickar sobre tus pokemons
+                        podras ver su informacion, ademas, debajo de cada uno hay un boton choose que te permite seleccionar en cada ronda al pokemon que
+                        desees.
+                      </p>
+                      <p className="text-xl font-black pb-2">¿Como se juega?</p>
+                      <p>
+                        Para jugar presione el boton de Play y se elegira una estadística aleatoria. Luego elige el pokemon que quieras para esa ronda
+                        con el boton choose.
+                      </p>
+                      <p className="text-xl font-black py-2">Sistema de juego: </p>
+                      <p>
+                        Cada nivel se basa en un sistema BO3 (esto quiere decir que no siempre se jugaran las 3 rondas) y el ganador de cada ronda se
+                        decide en funcion de el valor más alto de la estadística del pokemon que escojas y el escogido por la IA y, en caso de empate, se
+                        decidirá en base al TBS (suma de todas las stats) de los pokemons escogidos.
+                      </p>
+                      <p className="text-xl font-black pb-2">Recompensas: </p>
+                      <p>
+                        Superar un nivel te dara una cantidad de PokePuntos igual al nivel superado. Puedes usar estos PokePuntos para abrir mas sobres
+                        y mejorar tu equipo.
+                      </p>
+                    </div>
+                    <button
+                      className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
+                      onClick={() => setSeeInformation(false)}
+                    >
+                      Cerrar
+                    </button>
                   </div>
-                  <button
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700"
-                    onClick={() => setSeeInformation(false)}
-                  >
-                    Cerrar
-                  </button>
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         ) : (
           loading ? (

@@ -16,6 +16,9 @@ import ComplaintsList from "./pages/Complaints";
 import ComplaintsForm from "./pages/ComplaintForm";
 import UserList from "./pages/ListUsers";
 import Game from "./pages/Game";
+import News from "./pages/News";
+import TeamGuardRoute from "./components/TeamGuardRoute";
+
 
 function App() {
 
@@ -39,7 +42,8 @@ function App() {
               <Route path="/complaints" element={<ComplaintsList />} />
               <Route path="/newComplaint" element={<ComplaintsForm />} />
               <Route path="/users" element={<UserList />} />
-              <Route path="/game" element={<Game />} />
+              <Route path="/game" element={ <TeamGuardRoute><Game /></TeamGuardRoute>} />
+              <Route path="/news" element={<News/>}/>
             </Routes>
           </div>
           <div className=" fixed bottom-0  w-full">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Pokemon from "../models/Pokemon";
 import { useAuth } from "../contexts/AuthContext";
+import { AnimatePresence, motion } from "framer-motion";
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
   
@@ -10,6 +11,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
     const [selectedPokemons, setSelectedPokemons] = useState<number[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+    const [guardado, setGuardado] = useState(false)
   
   
     useEffect(() => {
@@ -52,7 +54,7 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
     const saveTeam = async () => {
       
       if (selectedPokemons.length !== 6) {
-        alert("Debes seleccionar exactamente 6 Pokémon.");
+        alert("Debes seleccionar exactamente 6 Pokémon.")
         return
       }
   
@@ -67,9 +69,9 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
         })
   
         const data = await response.json()
-        if (!response.ok) throw new Error(data.error || "Error al guardar el equipo");
+        if (!response.ok) throw new Error(data.error || "Error al guardar el equipo")
   
-        alert("¡Equipo guardado con éxito!")
+        setGuardado(true)
       } catch (error) {
         const msg = error instanceof Error ? error.message : 'Error desconocido'
         setError(msg)
@@ -114,10 +116,42 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
         >
           Guardar Equipo
         </button>
+        <AnimatePresence>
+        {guardado && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 bg-opacity-40  flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-pink-100 p-6 rounded-xl shadow-xl max-w-sm"
+              initial={{ y: -150, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 150, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h2 className="text-xl font-black text-black mb-4">Equipo guardado correctamente.</h2>
+              <p className="mb-6 text-black">Ya puedes acceder al juego.</p>
+              <div className="flex justify-end gap-4">
+                
+                <button
+                  onClick={() => {
+                    setGuardado(false)
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  Confirmar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
       </div>
     )
   }
   
-  export default Team;
+  export default Team
   

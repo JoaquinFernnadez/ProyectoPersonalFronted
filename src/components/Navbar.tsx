@@ -1,12 +1,22 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const [mostrarModal, setMostrarModal] = useState(false)
+
+  const abrirModal = () => setMostrarModal(true)
+  const cerrarModal = () => setMostrarModal(false)
+
+  const confirmarAccion = () => {
+    cerrarModal()
+    logout()
+    
+  }
 
   return (
-
-
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className=" text-gray-400 max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {user ? user.email : ''}
@@ -21,13 +31,50 @@ function Navbar() {
               <Link to="/users" className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Ranking</Link>
             </li>
             <li>
-              <button onClick={logout} className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Logout</button>
+              <button onClick={abrirModal} className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Logout</button>
             </li>
             <li>
               <Link to="/complaints" className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Complaints</Link>
             </li>
 
           </ul>
+          <AnimatePresence>
+        {mostrarModal && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 bg-opacity-40  flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-pink-100 p-6 rounded-xl shadow-xl max-w-sm"
+              initial={{ y: -150, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 150, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h2 className="text-xl font-black text-black mb-4">¿Estás seguro?</h2>
+              <p className="mb-6 text-black">Vas a cerrar tu sesion.</p>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={cerrarModal}
+                  className="px-4 py-2 text-white bg-red-600 rounded-md  hover:bg-red-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    confirmarAccion()
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  Confirmar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
         </div>
       </div>
     </nav>

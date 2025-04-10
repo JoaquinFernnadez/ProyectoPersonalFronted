@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
 import { useAuth } from "../contexts/AuthContext";
 import SalidaDatabase from "../models/PokemonFDB";
-import { UserService } from "../services/userService";
+import  UserService  from "../services/userService";
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Packs() {
   const { user } = useAuth()
-  const [pokemons, setPokemons] = useState<SalidaDatabase[]>([]);
+  const [pokemons, setPokemons] = useState<SalidaDatabase[]>([])
   // const [sprite , setSprite] = useState <string[]>([])
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [pokePuntos, setPokePuntos] = useState(0)
 
   //let reload = 1
@@ -24,37 +24,34 @@ function Packs() {
       const response = await fetch(API_URL_BASE + `/pokemon/packs?id=${user?.id}`, {
         method: "GET",
         credentials: "include", // Para enviar cookies si hay autenticación
-      });
+      })
 
       if (!response.ok) {
-        throw new Error("Error al abrir el sobre");
+        throw new Error("Error al abrir el sobre")
       }
 
       const data = await response.json();
 
-
       setPokemons(data);
-      await UserService.actualizarPokePuntos(user?.id || 0 , [1,2])
+      await UserService.actualizarPokePuntos(user?.id || 0, [1, 2])
       await fetchPuntos()
 
     } catch (error) {
-      console.error("Error al abrir el sobre:", error);
+      console.error("Error al abrir el sobre:", error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
 
     }
 
   }
   const fetchPuntos = async () => {
-    const puntos = await UserService.getPokePuntos(user?.id ||0)
+    const puntos = await UserService.getPokePuntos(user?.id || 0)
     setPokePuntos(puntos)
   }
-  useEffect( ()  => {
+  useEffect(() => {
 
     fetchPuntos()
   }, [])
-
-
 
   return (
     <div className="flex flex-col items-center p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
@@ -66,10 +63,10 @@ function Packs() {
       {pokemons?.length === 0 && (
         <div>
           <button onClick={openPack} disabled={isLoading}>
-          <img className="w-50 h-100 rounded-4xl " src="src/images/mejorespacks.jpg"></img>
+            <img className="w-50 h-100 rounded-4xl " src="src/images/mejorespacks.jpg"></img>
 
 
-        </button>
+          </button>
         </div>
       )}
 

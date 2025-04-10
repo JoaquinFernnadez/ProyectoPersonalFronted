@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Pokemon from "../models/Pokemon";
 import { useAuth } from "../contexts/AuthContext";
 import PokemonDetails from "../models/PokemonDetails";
+import PokemonService from "../services/pokemonService";
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -63,31 +64,11 @@ function Pokedex ()  {
     fetchPokedex()
   }, [page])
 
-  const fetchPokemonDetails = async (url: string) => {
-    try {
-      const id = await getId(url);
-      
-      const response = await fetch(`${API_URL_BASE}/pokemon/getDetail?id=${id}`);
-      if (!response.ok) throw new Error("Error al obtener detalles del Pokémon");
-      const data = await response.json();
-      setSelectedPokemon(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const getId = async (url: string) => {
-    const response = await fetch(url)
-  
-    const data = await response.json() as Partial<PokemonDetails>
-    return data.id
-    
-  }
+ 
 
   const handleNextPage = () => {
       setPage(page + 1)
-      setOffset(offset + 20)
-      
+      setOffset(offset + 20) 
   }
 
   const handlePrevPage = () => {
@@ -98,7 +79,7 @@ function Pokedex ()  {
   }
  
   return (
-    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950  w-screen h-full" >
+    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950  w-screen h-350" >
     <div className="max-w-5xl mx-auto p-6 flex flex-col ">
       {<h1 className="text-6xl text-red-700 font-bold text-center mb-6">Pokédex  Página {page} </h1>}
 
@@ -120,8 +101,10 @@ function Pokedex ()  {
             {pokemon.unlocked && (
             <button
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-              onClick={() => fetchPokemonDetails(pokemon.url)}
-              
+              onClick={async ()  =>setSelectedPokemon(
+                  await  PokemonService.fetchPokemonDetails(
+                  await PokemonService.getId(pokemon.url)
+                ))}
             >
               Ver detalles
             </button>
