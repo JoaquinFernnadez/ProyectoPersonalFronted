@@ -115,26 +115,26 @@ function Pokedex ()  {
       </div>
       {selectedPokemon && (
         <div className="fixed inset-0 bg-black/60  flex justify-center items-center">
-          <div className=" bg-white/85 p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold">{(selectedPokemon.name).toUpperCase()}</h2>
+          <div className=" bg-white/85 p-6 rounded-lg shadow-lg w-96 ">
+            <h2 className="text-2xl font-bold pb-2">{(selectedPokemon.name).toUpperCase()}</h2>
             <p>Altura: {selectedPokemon.height } dm</p>
             <p>Peso: {selectedPokemon.weight} hg</p>
 
-            <h3 className="mt-3 font-bold">Tipos:</h3>
+            <h3 className="mt-3 font-bold pt-2">Tipos :</h3>
             <ul>
               {selectedPokemon.types.map((type) => (
-                <li key={type} className="text-blue-500">{type}</li>
+                <li key={type} >{type}</li>
               ))}
             </ul>
 
-            <h3 className="mt-3 font-bold">Habilidades:</h3>
+            <h3 className="mt-3 font-bold pt-2">Habilidades :</h3>
             <ul>
               {selectedPokemon.abilities.map((ability) => (
-                <li key={ability} className="text-green-500">{ability}</li>
+                <li key={ability} >{ability}</li>
               ))}
             </ul>
 
-            <h3 className="mt-3 font-bold">Estadísticas:</h3>
+            <h3 className="mt-3 font-bold pt-2">Estadísticas:</h3>
             <ul>
               {selectedPokemon.stats.map((stats) => (
                 <li key={stats.stat}>{stats.stat}: {stats.base_stat}</li>

@@ -16,13 +16,15 @@ function Game() {
   const UserId: number = user?.id || 0
   const buttonRef = useRef<HTMLButtonElement>(null)
   const setStatsWasted = new Set()
-  
+
   const [win, setWin] = useState<boolean | null>(null)
   const [level, setLevel] = useState(1)
   const [round, setRound] = useState<number>(1);
   const [jugar, setJugar] = useState<boolean>(false)
+  const [aiStat, setAiStat] = useState(0)
   const [aiScore, setAiScore] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false)
+  const [userStat, setUserStat] = useState(0)
   const [userScore, setUserScore] = useState<number>(0);
   const [aiPokemons, setAiPokemons] = useState<PokemonDetails[]>([])
   const [loadingTeams, setLoadingTeams] = useState<boolean>(false)
@@ -32,6 +34,8 @@ function Game() {
   const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
   const [selectedStatIndex, setSelectedStatIndex] = useState<number>(0)
+  const [showBattleAnimation, setShowBattleAnimation] = useState<boolean>(false);
+
 
 
   const fetchTeams = async () => {
@@ -53,6 +57,8 @@ function Game() {
       console.error("Error al cargar los equipos", error)
     }
   }
+  // Esta funcion impone un tiempo minimo de carga, pero no lo alarga en caso de por si mismo llegar al minimo
+
   const loadWithMinDelay = async () => {
     const minDelay = new Promise(resolve => setTimeout(resolve, 2000))
     setLoadingTeams(true)
@@ -81,6 +87,9 @@ function Game() {
     const aiPokemon = AiSelection()
     const aiChoice = aiPokemon.stats[selectedStatIndex].base_stat
 
+    setUserStat(userChoice)
+    setAiStat(aiChoice)
+
     if (userChoice > aiChoice) setUserScore(userScore + 1)
     else if (userChoice < aiChoice) setAiScore(aiScore + 1)
     else if (userChoice == aiChoice) {
@@ -91,15 +100,22 @@ function Game() {
         setAiScore(aiScore + 1)
       }
     }
+    setShowBattleAnimation(true)
+
+    setTimeout(() => {
+      setShowBattleAnimation(false)
+      setSelectedStat("")
+      setJugar(false)
+    }, 3000)
+
     if (round == 1 || (round == 2 && (userScore == aiScore))) setRound(round + 1)
     if ((round == 2 && userScore != aiScore) || round == 3) {
       if (userScore > aiScore) setWin(true)
       else setWin(false)
-      setLoading(true)
+      setTimeout(() => {setLoading(true)},3000)
 
     }
-    setSelectedStat("")
-    setJugar(false)
+    
   }
   const getUserValue = (pokemon: PokemonDetails2) => {
     const stats = PokemonService.getArrayFromStats(pokemon)
@@ -125,6 +141,8 @@ function Game() {
     setAiScore(0)
     setAiPokemons([])
     setRound(1)
+    setAiStat(0)
+    setUserStat(0)
 
 
     if (win == true) {
@@ -209,7 +227,12 @@ function Game() {
 
             <div className="round-info text-center text-3xl py-6">
               <h2 className="py-2 text-green-400">Ronda {round}</h2>
-              <p className="py-2 text-green-400">{selectedStat ? `Stat seleccionada: ${selectedStat}` : "\u00A0"}</p>
+              <p className="py-2 text-green-400">{selectedStat
+                ? `Stat seleccionada: ${selectedStat}`
+                : userStat
+                  ? `User : ${userStat} ----  Ai : ${aiStat}`
+                  : "\u00A0"
+              }</p>
               <button disabled={!(!selectedStat)} className="text-green-400" onClick={getRandomStat}>Play</button>
             </div>
 
@@ -226,6 +249,50 @@ function Game() {
               </div>
 
             </div>
+            <AnimatePresence>
+              {showBattleAnimation && (
+                <motion.div
+                  className="fixed inset-0 bg-black/90 flex flex-col justify-center items-center z-50 text-white"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <div className="text-4xl font-bold mb-6">¡Batalla Pokémon!</div>
+
+                  <div className="flex items-center justify-around w-full max-w-4xl px-10">
+                    <div className="text-center">
+                      <img src={userPokemons.find(p => getUserValue(p.pokemon) === userStat)?.sprite} className="w-32 h-32 mx-auto" />
+                      <p className="mt-2">Tú</p>
+                      <p className="text-2xl">{userStat}</p>
+                    </div>
+
+                    <div className="text-center text-5xl font-extrabold text-red-500">VS</div>
+
+                    <div className="text-center">
+                      <img src={AiSelection()?.sprite} className="w-32 h-32 mx-auto" />
+                      <p className="mt-2">IA</p>
+                      <p className="text-2xl">{aiStat}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 text-2xl">
+                    Stat: <span className="capitalize text-yellow-300">{selectedStat}</span>
+                  </div>
+
+                  <motion.div
+                    className="mt-4 text-3xl font-bold"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2 }}
+                  >
+                    { userStat > aiStat
+                      ? "¡Ganaste la ronda!"
+                      : "Perdiste la ronda..."
+                      }
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {selectedPokemon && (
               <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
