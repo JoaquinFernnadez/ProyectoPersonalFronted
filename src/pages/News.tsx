@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import Article from "../models/News";
+import { useEffect, useState } from "react"
+import Article from "../models/News"
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE

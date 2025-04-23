@@ -21,7 +21,7 @@ function UserList() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        });
+        })
 
         setUsers(userList)  // ordenados por MaxLevel    desc
       } catch (error) {

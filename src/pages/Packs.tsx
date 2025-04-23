@@ -3,6 +3,9 @@ import { useAuth } from "../contexts/AuthContext"
 import SalidaDatabase from "../models/PokemonFDB"
 import UserService from "../services/userService"
 import { motion, AnimatePresence } from "framer-motion"
+// import Test3D from "../components/Test3D"
+import Pack3D from "../components/Pack3D"
+
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
@@ -48,6 +51,7 @@ function Packs() {
     }, 1200)
   }
 
+
   const fetchPuntos = async () => {
     const puntos = await UserService.getPokePuntos(user?.id || 0)
     setPokePuntos(puntos)
@@ -83,11 +87,7 @@ function Packs() {
         className="cursor-pointer z-10"
         onClick={openPack}
       >
-        <img
-          className="w-50 h-100 rounded-4xl"
-          src="src/images/mejorespacks.jpg"
-          alt="Pack"
-        />
+        <Pack3D />
       </motion.div>
 
 
@@ -109,7 +109,7 @@ function Packs() {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            
+
             <div className="relative bg-gradient-to-br from-yellow-400 via-red-500 to-pink-600 p-1 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.5)] max-w-4xl w-full">
               <div className="bg-gray-900 rounded-xl p-6 border-4 border-dashed border-yellow-300 overflow-y-auto max-h-[70vh]">
                 <h3 className="text-white text-xl font-bold mb-4 text-center font-mono drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">
@@ -120,10 +120,21 @@ function Packs() {
                   {pokemons.map((pokemon, index) => (
                     <motion.div
                       key={index}
-                      className="bg-gray-800 p-4 rounded-lg text-center border border-yellow-500 shadow-[0_0_10px_rgba(255,255,0,0.4)]"
+                      className="bg-gray-800 p-4 rounded-lg text-center border border-yellow-500 shadow-[0_0_10px_rgba(255,255,0,0.4)] cursor-pointer"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      whileHover={{ scale: 1.05, rotate: 1 }}
+                      whileTap={{ scale: 0.95 }}
+                      layout
+                      transition={{
+                        delay: index * 0.1,
+                        duration: 0.4,
+                        ease: "easeOut",
+                        type: "spring",
+                        stiffness: 100
+                      }}
+
                     >
                       <img
                         src={pokemon.sprite}
@@ -136,6 +147,7 @@ function Packs() {
                     </motion.div>
                   ))}
                 </div>
+
 
                 <button
                   onClick={handleClose}

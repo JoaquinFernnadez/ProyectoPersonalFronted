@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { useState } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from 'react'
+import { motion, AnimatePresence } from "framer-motion"
 
 function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth()
   const [mostrarModal, setMostrarModal] = useState(false)
 
   const abrirModal = () => setMostrarModal(true)

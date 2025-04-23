@@ -8,3 +8,4 @@ export default interface User{
     role: string
     accepNotifications?: boolean
 }
+

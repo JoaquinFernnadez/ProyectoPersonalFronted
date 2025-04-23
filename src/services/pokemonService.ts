@@ -35,18 +35,30 @@ export default class PokemonService {
     static async fetchPokemonDetails(id?: number) {
         try {
 
-            const response = await fetch(`${API_URL_BASE}/pokemon/getDetail?id=${id}`);
-            if (!response.ok) throw new Error("Error al obtener detalles del Pokémon");
-            const data = await response.json();
+            const response = await fetch(`${API_URL_BASE}/pokemon/getDetail?id=${id}`)
+            if (!response.ok) throw new Error("Error al obtener detalles del Pokémon")
+            const data = await response.json()
             return data
         } catch (error) {
-            console.error(error);
+            console.error(error)
         }
     }
     static async getId(url: string) {
         const response = await fetch(url)
         const data = await response.json() as Partial<PokemonDetails>
         return data.id
-
     }
+    static async handleAceptarIntercambio(id: number) {
+        try {
+            const res = await fetch(`/api/pokemon/gts/aceptar/${id}`, {
+                method: "POST",
+            })
+
+            if (!res.ok) throw new Error("No se pudo aceptar el intercambio")
+            alert("Intercambio aceptado")
+        } catch (err) {
+            alert(err)
+        }
+    }
+    
 }

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import Pokemon from "../models/Pokemon";
-import { useAuth } from "../contexts/AuthContext";
-import PokemonDetails from "../models/PokemonDetails";
-import PokemonService from "../services/pokemonService";
+import { useEffect, useState } from "react"
+import Pokemon from "../models/Pokemon"
+import { useAuth } from "../contexts/AuthContext"
+import PokemonDetails from "../models/PokemonDetails"
+import PokemonService from "../services/pokemonService"
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -11,12 +11,12 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 function Pokedex ()  {
   const {user} = useAuth()
 
-  const [page, setPage] = useState(1);
-  const [error, setError] = useState("");
-  const [offset, setOffset] = useState(0);
-  const [sprite, setSprites] = useState <string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pokemons, setPokemons] = useState <Pokemon[]>([]);
+  const [page, setPage] = useState(1)
+  const [error, setError] = useState("")
+  const [offset, setOffset] = useState(0)
+  const [sprite, setSprites] = useState <string[]>([])
+  const [loading, setLoading] = useState(true)
+  const [pokemons, setPokemons] = useState <Pokemon[]>([])
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
 
 
@@ -40,7 +40,7 @@ function Pokedex ()  {
             data.map(async (pokemon) => {
               const responseSprites = await fetch(pokemon.url)
               const dataSprites = await responseSprites.json()
-              return dataSprites.sprites.front_default;
+              return dataSprites.sprites.front_default
             })
           )
          

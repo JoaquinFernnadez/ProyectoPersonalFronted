@@ -1,67 +1,68 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import { AuthService } from "../services/authService";
-import User from "../models/User";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import ErrorMsgData from "../utils/ErrorMsgData";
-import InputForm from "../components/InputForm";
+import React, { ChangeEvent, FormEvent, useState } from "react"
+import { AuthService } from "../services/authService"
+import User from "../models/User"
+import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
+import ErrorMsgData from "../utils/ErrorMsgData"
+import InputForm from "../components/InputForm"
 
 const Register: React.FC = () => {
   const [form, setForm] = useState<Partial<User>>({
     name: "",
     email: "",
     password: "",
-  });
-  const [errors, setErrors] = useState<Record<string, string | undefined>>({});
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  })
+  const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
   const handleSubmit = async (e: FormEvent) => {
     try {
-      setLoading(true);
-      setErrors({});
+      setLoading(true)
+      setErrors({})
 
-      e.preventDefault();
+      e.preventDefault()
 
-      await AuthService.registerUser(form);
+      await AuthService.registerUser(form)
 
-      toast.success("Usuario registrado con éxito!");
-      navigate("/");
+      toast.success("Usuario registrado con éxito!")
+      navigate("/")
     } catch (error) {
-      toast.error("Error al registrar el usuario.");
+      toast.error("Error al registrar el usuario.")
 
       if (Array.isArray(error)) {
         const errorObj: Record<string, string> = error?.reduce((acc: Record<string, string>, err: unknown) => {
-          const errorDetail = err as ErrorMsgData;
-          acc[errorDetail.path] = errorDetail.msg;
-          return acc;
-        }, {});
-        setErrors(errorObj);
+          const errorDetail = err as ErrorMsgData
+          acc[errorDetail.path] = errorDetail.msg
+          return acc
+        }, {})
+        setErrors(errorObj)
       } else if (error instanceof Error) {
         const msg = error instanceof Error ? error.message : "Error desconocido"
-        setErrors({ message: msg || 'Error desconocido' });
+        setErrors({ message: msg || 'Error desconocido' })
       } else {
-        setErrors({ message: error as string || 'Error desconocido' });
+        setErrors({ message: error as string || 'Error desconocido' })
       }
 
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { value, name } = e.target;
-    //if(name==='idCategory') valueNew = Number(value)
-    setForm({ ...form, [name]: value });
-  };
+    const { value, name } = e.target
+    
+    setForm({ ...form, [name]: value })
+  }
 
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>
 
   return (
-    <form className="max-w-sm mx-auto min-w-sm" onSubmit={handleSubmit}>
+    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 w-full h-screen">
+    <form className="max-w-sm mx-auto min-w-sm pt-30" onSubmit={handleSubmit}>
       <InputForm text="Nombre de Usuario" name="name" value={form.name || ''} handleChange={handleChange} error={errors.name} />
       {/* <InputForm text="Apellidos" name="surname" value={form.surname || ''} handleChange={handleChange} error={errors.surname} /> */}
       <InputForm text="Email" name="email" value={form.email || ''} handleChange={handleChange} error={errors.email} />
@@ -80,7 +81,8 @@ const Register: React.FC = () => {
         Submit
       </button>
     </form>
-  );
-};
+    </div>
+  )
+}
 
-export default Register;
+export default Register

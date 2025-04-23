@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import Pokemon from "../models/Pokemon";
-import { useAuth } from "../contexts/AuthContext";
-import PokemonDetails from "../models/PokemonDetails";
-import  PokemonService  from "../services/pokemonService";
+import Pokemon from "../models/Pokemon"
+import { useAuth } from "../contexts/AuthContext"
+import PokemonDetails from "../models/PokemonDetails"
+import  PokemonService  from "../services/pokemonService"
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -12,9 +12,9 @@ const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 function UserTeam() {
   const { user } = useAuth()
   
-  const [team, setTeam] = useState<Pokemon[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [team, setTeam] = useState<Pokemon[]>([])
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(true)
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails|null> (null)
  
   useEffect(() => {

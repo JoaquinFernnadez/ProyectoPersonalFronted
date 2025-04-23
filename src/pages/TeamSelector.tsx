@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import Pokemon from "../models/Pokemon";
-import { useAuth } from "../contexts/AuthContext";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState, useEffect } from "react"
+import Pokemon from "../models/Pokemon"
+import { useAuth } from "../contexts/AuthContext"
+import { AnimatePresence, motion } from "framer-motion"
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 

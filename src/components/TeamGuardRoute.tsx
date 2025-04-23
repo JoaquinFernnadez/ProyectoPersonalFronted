@@ -1,6 +1,6 @@
-import {  useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import {  useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 
 const TeamGuardRoute = ({ children }: {children: React.ReactNode}) => {
     const {user} = useAuth()
@@ -24,7 +24,7 @@ const TeamGuardRoute = ({ children }: {children: React.ReactNode}) => {
         const data = await res.json()
 
         if (data.length > 0) {
-          setHasTeam(true);
+          setHasTeam(true)
         } else {
           navigate("/", { replace: true })
         }
@@ -32,7 +32,7 @@ const TeamGuardRoute = ({ children }: {children: React.ReactNode}) => {
         console.error("Error consultando equipo:", err)
         navigate("/", { replace: true })
       } finally {
-        setChecking(false);
+        setChecking(false)
       }
     }
 
@@ -52,7 +52,7 @@ const TeamGuardRoute = ({ children }: {children: React.ReactNode}) => {
     )
   }
 
-  return hasTeam ? children : null;
+  return hasTeam ? children : null
 }
 
 export default TeamGuardRoute

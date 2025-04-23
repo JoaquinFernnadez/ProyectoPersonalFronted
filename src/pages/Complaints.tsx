@@ -1,43 +1,43 @@
-import { useEffect, useState } from "react";
-import Complaint from "../models/Complaint";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useEffect, useState } from "react"
+import Complaint from "../models/Complaint"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 export default function ComplaintsList() {
-    const { user } = useAuth();
-    const navigate = useNavigate();
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
-    const [error, setError] = useState(null as string | null);
-    const [loading, setLoading] = useState(true);
-    const [complaints, setComplaints] = useState<Complaint[]>([]);
+    const [error, setError] = useState(null as string | null)
+    const [loading, setLoading] = useState(true)
+    const [complaints, setComplaints] = useState<Complaint[]>([])
 
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
         const response = await fetch(API_URL_BASE+`/complaints/list?id=${user?.id}`, {
           method: "GET",
-          credentials: "include", // Incluye cookies o tokens de sesión si es necesario
-        });
+          credentials: "include",
+        })
 
-        if (!response.ok) throw new Error("Error al obtener las quejas");
+        if (!response.ok) throw new Error("Error al obtener las quejas")
 
-        const data = await response.json();
-        setComplaints(data);
+        const data = await response.json()
+        setComplaints(data)
       } catch (error) {
-        setError(error instanceof Error ? error.message : "Error desconocido");
-        console.error(error);
+        setError(error instanceof Error ? error.message : "Error desconocido")
+        console.error(error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchComplaints();
-  }, []);
+    fetchComplaints()
+  }, [])
 
-  if (loading) return <p className="text-center text-gray-500">Cargando...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (loading) return <p className="text-center text-gray-500">Cargando...</p>
+  if (error) return <p className="text-center text-red-500">{error}</p>
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-5  bg-orange-200 shadow-lg rounded-lg flex flex-col items-center">
@@ -56,5 +56,5 @@ export default function ComplaintsList() {
       )}
         <button className="bg-green-700 h-10 w-30  rounded"    onClick={() => navigate('/newComplaint')}>Nueva Queja</button>
     </div>
-  );
+  )
 }

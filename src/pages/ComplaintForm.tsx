@@ -1,17 +1,17 @@
-import { FormEvent, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { FormEvent, useState } from "react"
+import { useAuth } from "../contexts/AuthContext"
 
 export default function ComplaintsForm() {
     const {user} = useAuth()
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [message, setMessage] = useState("")
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setMessage("");
-    
-    const complaint = { titulo: title, descripcion: description, userId: user?.id};
+    e.preventDefault()
+    setMessage("")
+
+    const complaint = { titulo: title, descripcion: description, userId: user?.id}
 
     try {
       const response = await fetch("http://localhost:3000/api/complaints/create", {
@@ -21,20 +21,20 @@ export default function ComplaintsForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(complaint),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error("Error al enviar la queja");
+        throw new Error("Error al enviar la queja")
       }
 
-      setMessage("Queja enviada con éxito");
-      setTitle("");
-      setDescription("");
+      setMessage("Queja enviada con éxito")
+      setTitle("")
+      setDescription("")
     } catch (error) {
     if (error instanceof Error)
         setMessage(error.message)
     }
-  };
+  }
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-5 bg-orange-200 shadow-lg rounded-lg">
@@ -68,5 +68,5 @@ export default function ComplaintsForm() {
         </button>
       </form>
     </div>
-  );
+  )
 }

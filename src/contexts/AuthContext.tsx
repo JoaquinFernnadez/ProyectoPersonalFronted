@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { AuthService } from "../services/authService";
+import { createContext, useContext, useEffect, useState } from "react"
+import { AuthService } from "../services/authService"
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
@@ -33,7 +33,7 @@ export function AuthProvider({children}:{children: React.ReactNode}){
             try{
                 const response = await fetch(API_URL_BASE+'/auth/login',
                  {credentials: 'include', method: 'POST'})
-                if (!response.ok) throw new Error("No autenticado");
+                if (!response.ok) throw new Error("No autenticado")
                 const data = await response.json()
                 setUser(data)
             }catch(error){
@@ -49,13 +49,13 @@ export function AuthProvider({children}:{children: React.ReactNode}){
             const a = await AuthService.loginUser(email, password)
             const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
             console.log(response)
-            if (!response.ok) throw new Error("No autenticado");
+            if (!response.ok) throw new Error("No autenticado")
             const data = await response.json()
             console.log('Usuario logueado:', data)
             console.log('Usuario logueado token:', a)
             setUser(data)
         }catch(error){
-            console.error("Error en el login:", error);
+            console.error("Error en el login:", error)
             throw new Error("Error en el login")
         }
     }
@@ -74,8 +74,8 @@ export function AuthProvider({children}:{children: React.ReactNode}){
 export function useAuth() {
     const context = useContext(AuthContext)
     if(!context) {
-        console.warn("useAuth se está usando fuera del AuthProvider");
-        return { user: null, isAuthenticated: false, logout: () => {}, login: () => {} };
+        console.warn("useAuth se está usando fuera del AuthProvider")
+        return { user: null, isAuthenticated: false, logout: () => {}, login: () => {} }
     }
     return context
 }

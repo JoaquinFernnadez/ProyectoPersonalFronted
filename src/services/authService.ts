@@ -1,5 +1,5 @@
-import User from "../models/User";
-import { fetchAPI } from "../utils/FetchAPI";
+import User from "../models/User"
+import { fetchAPI } from "../utils/FetchAPI"
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE

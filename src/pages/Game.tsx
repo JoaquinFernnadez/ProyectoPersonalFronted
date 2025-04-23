@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef } from "react";
-import PokemonDetails from "../models/PokemonDetails";
-import { useAuth } from "../contexts/AuthContext";
-import SalidaDatabase, { PokemonDetails2 } from "../models/PokemonFDB";
-import { useNavigate } from "react-router-dom";
-import UserService from "../services/userService";
-import PokemonService from "../services/pokemonService";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react"
+import PokemonDetails from "../models/PokemonDetails"
+import { useAuth } from "../contexts/AuthContext"
+import SalidaDatabase, { PokemonDetails2 } from "../models/PokemonFDB"
+import { useNavigate } from "react-router-dom"
+import UserService from "../services/userService"
+import PokemonService from "../services/pokemonService"
+import { AnimatePresence, motion } from "framer-motion"
 
-let stats: string[] = [];
+let stats: string[] = []
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 function Game() {
-  const { user } = useAuth();
+  const { user } = useAuth()
   const navigate = useNavigate()
   const UserId: number = user?.id || 0
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -19,27 +19,27 @@ function Game() {
 
   const [win, setWin] = useState<boolean | null>(null)
   const [level, setLevel] = useState(1)
-  const [round, setRound] = useState<number>(1);
+  const [round, setRound] = useState<number>(1)
   const [jugar, setJugar] = useState<boolean>(false)
   const [aiStat, setAiStat] = useState(0)
-  const [aiScore, setAiScore] = useState<number>(0);
+  const [aiScore, setAiScore] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
   const [userStat, setUserStat] = useState(0)
-  const [userScore, setUserScore] = useState<number>(0);
+  const [userScore, setUserScore] = useState<number>(0)
   const [aiPokemons, setAiPokemons] = useState<PokemonDetails[]>([])
   const [loadingTeams, setLoadingTeams] = useState<boolean>(false)
   const [userPokemons, setUserPokemons] = useState<SalidaDatabase[]>([])
-  const [selectedStat, setSelectedStat] = useState<string>("");
+  const [selectedStat, setSelectedStat] = useState<string>("")
   const [seeInformation, setSeeInformation] = useState<boolean>(false)
   const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null)
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
   const [selectedStatIndex, setSelectedStatIndex] = useState<number>(0)
-  const [showBattleAnimation, setShowBattleAnimation] = useState<boolean>(false);
+  const [showBattleAnimation, setShowBattleAnimation] = useState<boolean>(false)
 
 
 
   const fetchTeams = async () => {
-    stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
+    stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"]
     try {
       if (userPokemons.length < 6) {
         const userResponse = await fetch(API_URL_BASE + `/pokemon/verEquipo?id=${UserId}`)
@@ -57,7 +57,8 @@ function Game() {
       console.error("Error al cargar los equipos", error)
     }
   }
-  // Esta funcion impone un tiempo minimo de carga, pero no lo alarga en caso de por si mismo llegar al minimo
+
+  // Esta funcion impone un tiempo minimo de carga, pero no lo alarga en caso de que por si mismo llegue al minimo
 
   const loadWithMinDelay = async () => {
     const minDelay = new Promise(resolve => setTimeout(resolve, 2000))
@@ -72,8 +73,8 @@ function Game() {
 
   const getRandomStat = () => {
     const index = Math.floor(Math.random() * stats.length)
-    const randomStat = stats[index];
-    setSelectedStat(randomStat);
+    const randomStat = stats[index]
+    setSelectedStat(randomStat)
     stats.splice(index, 1)
     setStatsWasted.add(randomStat)
     setSelectedStatIndex(index)
@@ -112,10 +113,10 @@ function Game() {
     if ((round == 2 && userScore != aiScore) || round == 3) {
       if (userScore > aiScore) setWin(true)
       else setWin(false)
-      setTimeout(() => {setLoading(true)},3000)
+      setTimeout(() => { setLoading(true) }, 3000)
 
     }
-    
+
   }
   const getUserValue = (pokemon: PokemonDetails2) => {
     const stats = PokemonService.getArrayFromStats(pokemon)
@@ -187,11 +188,11 @@ function Game() {
   }
   const abrirInfo = () => {
     if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setButtonPosition({ top: rect.top, left: rect.left });
+      const rect = buttonRef.current.getBoundingClientRect()
+      setButtonPosition({ top: rect.top, left: rect.left })
     }
-    setSeeInformation(true);
-  };
+    setSeeInformation(true)
+  }
 
   return (
     <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
@@ -285,10 +286,10 @@ function Game() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 2 }}
                   >
-                    { userStat > aiStat
+                    {userStat > aiStat
                       ? "¡Ganaste la ronda!"
                       : "Perdiste la ronda..."
-                      }
+                    }
                   </motion.div>
                 </motion.div>
               )}
@@ -342,7 +343,7 @@ function Game() {
                     <div>
                       <p className="text-xl font-black pb-2">¿Que puedo hacer con mi equipo?</p>
                       <p>
-                        En esta panatalla puedes observar en la parte superior tu equipo pokemon con 2 funcionalidades. Al clickar sobre tus pokemons
+                        En esta panatalla puedes observar, en la parte superior, tu equipo pokemon con 2 funcionalidades. Al clickar sobre tus pokemons
                         podras ver su informacion, ademas, debajo de cada uno hay un boton choose que te permite seleccionar en cada ronda al pokemon que
                         desees.
                       </p>
@@ -442,5 +443,5 @@ function Game() {
 }
 
 
-export default Game;
+export default Game
 
