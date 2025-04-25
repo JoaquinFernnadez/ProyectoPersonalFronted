@@ -1,80 +1,62 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
+import HomeCard from "../components/HomeCard"
 
 function Home() {
   const { user } = useAuth()
-  const navigate = useNavigate()
-
 
   return (
-    <div className="text-white flex-wrap bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-400 w-screen">
-      <h1 className="flex text-blue-400 py-18 justify-center text-6xl">Bienvenido a PokeTu</h1>
+    <div className="text-white flex-wrap  bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-screen">
+      <h1 className="flex text-blue-700 py-18 justify-center text-6xl">Bienvenido a PokeTu</h1>
 
-      {user ? (<div className="flex flex-wrap justify-center  px-20 text-white">
-        <div className="flex max-w-sm pr-5  border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
+      {user ? (<div className="flex flex-wrap justify-evenly px-20 text-white">
+        <HomeCard
+          title="Game"
+          description="Do you wanna test the strong of your team? Here u can see what level your team can reach"
+          image="src/images/game.png"
+          route="/game"
+          gradient="from-blue-700 to-purple-700"
+        />
 
-          <div className="flex flex-col p-5  rounded">
-            <img src="src/images/game.png" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-blue-400">Game  </h5>
-            <p className="mb-3 font-normal text-gray-700  dark:text-green-300">Do you wanna test the strong of your team? Here u can see what level your team can reach</p>
-            <button className="mt-auto w-full text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/game')}>GO</button>
-          </div>
-        </div>
+        <HomeCard
+          title="PokePacks"
+          description="Here u can unlock new pokemons to build a stronger Team."
+          image="src/images/mejorespacks.webp"
+          route="/packs"
+          gradient="from-purple-700 to-blue-700"
+        />
 
-        <div className="flex max-w-sm pl-5  border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
-          <div className="flex flex-col p-5 rounded">
-            <img src="src/images/mejorespacks.webp" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl text-center font-bold tracking-tight text-gray-900 dark:text-blue-400">PokePacks  </h5>
+        <HomeCard
+          title="Pokedex"
+          description="A realy good tool to see all pokemons and know which ones still didn’t appear. Check your own too!"
+          image="src/images/pokedex.jpeg"
+          route="/pokedex"
+          gradient="from-blue-700 to-purple-700"
+        />
 
-            <p className="mb-3 font-normal text-gray-700  dark:text-green-300">Here u can unlock new pokemons to build a stronger Team.</p>
-            <button className="mt-auto w-full text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/packs')}>GO</button>
-          </div>
-        </div>
+        <HomeCard
+          title="Mi equipo"
+          description="Here you can see your 6 selected pokemons for your team."
+          image="src/images/equipo.jpg"
+          route="/myteam"
+          gradient="from-purple-700 to-blue-700"
+        />
 
-        <div className="max-w-sm  pr-5 rounded-lg shadow-sm  dark:border-gray-700">
-          <div className="p-5    rounded ">
-            <img src="src/images/pokedex.jpeg" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl text-center font-bold  tracking-tight text-gray-900 dark:text-blue-400">Pokedex</h5>
-            <p className="mb-3 font-normal text-gray-700 dark:text-green-300">A realy good tool for users to see all pokemons and know what Pokemons still didnt appear. U also can check
-              pokemon details of that pokemons u already have.
-            </p>
-            <button className="mt-auto w-full text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/pokedex')}>GO</button>
-          </div>
-        </div>
+        <HomeCard
+          title="News"
+          description="Click here and stay informed about all the latest Pokémon news!"
+          image="src/images/pokenews.jpg"
+          route="/news"
+          gradient="from-blue-700 to-purple-700"
+        />
 
-        <div className="flex max-w-sm  pl-5
-         border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
-          <div className="flex flex-col p-5  rounded">
-            <img src="src/images/equipo.jpg" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-blue-400">Mi equipo</h5>
-
-            <p className="mb-3 font-normal text-gray-700 dark:text-green-300">Here you can see your 6 selected pokemons for your team.</p>
-            <button className="mt-auto w-full  text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/myteam')}>GO</button>
-          </div>
-        </div>
-
-        <div className="flex max-w-sm  pr-5 border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
-
-          <div className="flex flex-col p-5  rounded">
-            <img src="src/images/pokemons.webp" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-blue-400">Mis pokemons</h5>
-
-            <p className="mb-3 font-normal text-gray-700 dark:text-green-300">Here you can see all your unlocked pokemons and also select what 6 pokemons are gonna be part of your team. </p>
-            <button className="mt-auto w-full text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/team')}>GO</button>
-          </div>
-        </div>
-
-        <div className="flex max-w-sm  pl-5 border-gray-200 rounded-lg shadow-sm  dark:border-gray-700">
-
-          <div className="flex flex-col p-5  rounded">
-            <img src="src/images/pokenews.jpg" className="rounded h-55" />
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-blue-400">News  </h5>
-
-            <p className="mb-3 font-normal text-gray-700  dark:text-green-300">Do you wanna stay informed about all Pokemon news?. Then click here and know about all Pokemon news</p>
-            <button className="mt-auto w-full text-blue-300 border border-gray-600 bg-gray-700 hover:bg-green-800  h-10  rounded" onClick={() => navigate('/news')}>GO</button>
-          </div>
-        </div>
-
+        <HomeCard
+          title="GTS"
+          description="Search for trades to unlock all pokemons!"
+          image="src/images/gts.jpg"
+          route="/gts"
+          gradient="from-purple-700 to-blue-700"
+        />
       </div>
       ) : (
 

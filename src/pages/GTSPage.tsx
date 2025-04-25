@@ -1,122 +1,148 @@
 import { useEffect, useState } from "react";
 import Intercambio from "../models/Intercambios";
-import { useAuth } from "../contexts/AuthContext";
 import PokemonService from "../services/pokemonService";
+import { useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAuth } from "../contexts/AuthContext";
+import IntercambioAnimacion from "../components/IntercambioAnimacion";
+import AlertaFlotante from "../components/AlertaFlotante";
 
 const GTSPage = () => {
-
     const { user } = useAuth()
+    const navigate = useNavigate()
 
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [intercambios, setIntercambios] = useState<Intercambio[]>([])
-    const [pokemonDeseado, setPokemonDeseado] = useState("")
-    const [pokemonOfrecido, setPokemonOfrecido] = useState("")
-
+    const [mostrarAlerta, setMostrarAlerta] = useState(false)
+    const [mensajeAlerta, setMensajeAlerta] = useState("")
+    const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
+    const [intercambioARealizar, setIntercambioARealizar] = useState<number | null>(null)
+    const [mostrarAnimacion, setMostrarAnimacion] = useState(false)
 
     const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
-    useEffect(() => {
-        const fetchIntercambios = async () => {
-            const response = await fetch(API_URL_BASE + "/api/pokemon/gts")
-            const data = await response.json()
-            setIntercambios(data)
-            setLoading(false)
-        }
+    const fetchIntercambios = async () => {
+        setLoading(true)
+        const response = await fetch(API_URL_BASE + `/pokemon/gts?id=${user?.id}`)
+        const data = await response.json()
+        setIntercambios(data)
+        setLoading(false)
+    }
 
+    useEffect(() => {
         fetchIntercambios()
     }, [])
 
-    const handleCrearIntercambio = async () => {
-        try {
-            const res = await fetch("/api/pokemon/gts/crear", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    usuarioId: user?.id, 
-                    pokemonOfrecido,
-                    spriteOfrecido: "", // ruta del sprite, si lo tienes
-                    pokemonDeseado,
-                }),
-            })
-
-            if (!res.ok) throw new Error("No se pudo crear el intercambio")
-
-            const nuevoIntercambio = await res.json()
-            alert("Intercambio creado con éxito")
-            setIntercambios((prev) => [...prev, nuevoIntercambio])
-        } catch (err) {
-            alert(err)
-        }
-    }
-
-    const handleAceptarIntercambio = async (id: number) => {
-        await PokemonService.handleAceptarIntercambio(id)
+    const handleIntercambio = async (id: number) => {
+        const msj = await PokemonService.handleAceptarIntercambio(id, user?.id) as string
+        setMensajeAlerta(msj)
+        setMostrarAlerta(true)
+        setMostrarAnimacion(true)
         setIntercambios((prev) => prev.filter((i) => i.id !== id))
+    }
+    const handleClickAceptar = async (id: number) => {
+        setMostrarConfirmacion(true)
+        setIntercambioARealizar(id)
+    }
+    const confirmarIntercambio = () => {
+        handleIntercambio(intercambioARealizar || 0)
+        setMostrarConfirmacion(false)
+    }
+    const cancelarIntercambio = () => {
+        setMostrarConfirmacion(false)
+        setIntercambioARealizar(null)
     }
 
     return loading ? (
         <div className="flex flex-col items-center justify-center text-white p-6 h-screen">
-          <img src="src/images/poketu.png" className="pb-15" />
-          <img
-            src="src/images/pokeball2.png"
-            alt="Pokéball Spinner"
-            className="w-24 h-24 animate-spin mb-4 rounded-full"
-          />
-          <p className="text-xl mb-4 py-5 text-blue-400">Cargando GTS...</p>
-          <div className="flex justify-center items-center space-x-4 mb-4 pt-5">
-            <img src="src/images/1.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-            <img src="src/images/4.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-            <img src="src/images/7.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-          </div>
-        </div>
-      ) : (
-        <div className="p-6">
-          <h2 className="text-xl font-bold mb-4">Intercambios GTS</h2>
-      
-          {/* Crear Intercambio */}
-          <div className="mb-6">
-            <input
-              type="text"
-              placeholder="Pokémon Ofrecido"
-              value={pokemonOfrecido}
-              onChange={(e) => setPokemonOfrecido(e.target.value)}
-              className="border rounded p-2 mr-2"
+            <img src="src/images/poketu.png" className="pb-15" />
+            <img
+                src="src/images/pokeball2.png"
+                alt="Pokéball Spinner"
+                className="w-24 h-24 animate-spin mb-4 rounded-full"
             />
-            <input
-              type="text"
-              placeholder="Pokémon Deseado"
-              value={pokemonDeseado}
-              onChange={(e) => setPokemonDeseado(e.target.value)}
-              className="border rounded p-2 mr-2"
-            />
-            <button
-              onClick={handleCrearIntercambio}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Crear Intercambio
-            </button>
-          </div>
-      
-          {/* Mostrar Intercambios */}
-          <div className="grid gap-4">
-            {intercambios.map((i) => (
-              <div key={i.id} className="border p-4 rounded shadow">
-                <p><strong>Ofrece:</strong> {i.pokemonOfrecido.name}</p>
-                <p><strong>Quiere:</strong> {i.pokemonDeseado.name}</p>
-                <button
-                  onClick={() => handleAceptarIntercambio(i.id)}
-                  className="mt-2 bg-green-500 text-white px-4 py-1 rounded"
-                >
-                  Aceptar
-                </button>
-              </div>
-            ))}
-          </div>
+            <p className="text-xl mb-4 py-5 text-blue-400">Cargando GTS...</p>
+            <div className="flex justify-center items-center space-x-4 mb-4 pt-5">
+                <img src="src/images/1.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
+                <img src="src/images/4.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
+                <img src="src/images/7.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
+            </div>
         </div>
-      )
-      
+    ) : (
+        <div className="p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full ">
+            <h2 className="text-5xl font-bold text-green-400 mb-4 text-center pb-8 pt-10">GTS</h2>
+
+            {/* Crear Intercambio */}
+            <div className="mb-6 text-center pb-10">
+                <div className="flex justify-end  pb-6">
+                    <button onClick={() => navigate("/management")} className="bg-green-600 hover:bg-green-800 cursor-pointer text-white rounded py-2 px-3">Tus Intercambios</button>
+                </div>
+            </div>
+
+            {/* Mostrar Intercambios */}
+            <div className=" gap-4 flex flex-wrap justify-evenly">
+                {intercambios.map((intercambio) => (
+                    <div key={intercambio.id} className="border p-4 rounded shadow flex flex-col items-center w-72 bg-black/20">
+                        <p className="text-green-400"><strong className="text-orange-400">Ofrece:</strong> {intercambio.pokemonOfrecido.name}</p>
+                        <img src={intercambio.pokemonOfrecido.sprite} alt={intercambio.pokemonOfrecido.name} className="w-24 h-24" />
+                        <p className="text-red-400"><strong className="text-orange-400">Quiere:</strong> {intercambio.pokemonDeseado.name}</p>
+                        <img src={intercambio.pokemonDeseado.sprite} alt={intercambio.pokemonDeseado.name} className="w-24 h-24 " />
+                        <button
+                            onClick={() => handleClickAceptar(intercambio.id)}
+                            className="mt-2 bg-green-600 hover:bg-green-800 cursor-pointer text-white px-4 py-1 rounded"
+                        >
+                            Aceptar
+                        </button>
+                        {mostrarAlerta && <AlertaFlotante mensaje={mensajeAlerta} />}
+                        {mostrarAnimacion && (
+                            <IntercambioAnimacion
+                                pokemonSalida={intercambio.pokemonDeseado.sprite}
+                                pokemonEntrada={intercambio.pokemonOfrecido.sprite}
+                                onDone={() => setMostrarAnimacion(false)}
+                            />
+                        )}
+                    </div>
+                ))}
+            </div>
+            <AnimatePresence>
+                {mostrarConfirmacion && (
+                    <motion.div
+                        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            className="bg-gray-200 p-6 rounded shadow-xl text-center"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.8, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <p className="mb-4 text-lg font-semibold text-black">
+                                ¿Estás seguro de que quieres ACEPTAR este intercambio?
+                            </p>
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    onClick={confirmarIntercambio}
+                                    className="bg-green-500 hover:bg-green-700 text-white px-4 cursor-pointer py-2 rounded"
+                                >
+                                    Sí, aceptar
+                                </button>
+                                <button
+                                    onClick={cancelarIntercambio}
+                                    className="bg-gray-500 hover:bg-gray-700 cursor-pointer text-black px-4 py-2 rounded"
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    )
+
 }
 
 export default GTSPage

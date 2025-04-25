@@ -19,6 +19,7 @@ import Game from "./pages/Game"
 import News from "./pages/News"
 import TeamGuardRoute from "./components/TeamGuardRoute"
 import GTSPage from "./pages/GTSPage"
+import GTSManagement from "./pages/GTSManagement"
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
               <Route path="/myteam" element={<UserTeam />} />
               <Route path="/pokedex" element={<Pokedex />} />
               <Route path="/game" element={ <TeamGuardRoute><Game /></TeamGuardRoute>} />
+              <Route path="/management" element={<GTSManagement/>} /> 
 
               <Route path="/complaints" element={<ComplaintsList />} />
               <Route path="/newComplaint" element={<ComplaintsForm />} />

@@ -46,16 +46,34 @@ export default class PokemonService {
     static async getId(url: string) {
         const response = await fetch(url)
         const data = await response.json() as Partial<PokemonDetails>
+        console.log(data)
         return data.id
     }
-    static async handleAceptarIntercambio(id: number) {
+    static async handleAceptarIntercambio(id: number, userId?: number) {
+        
         try {
-            const res = await fetch(`/api/pokemon/gts/aceptar/${id}`, {
+            const res = await fetch(API_URL_BASE + `/pokemon/gts/aceptar?id=${id}`, {
                 method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                  },
+                body: JSON.stringify({ usuarioAceptaId: userId }),
             })
 
             if (!res.ok) throw new Error("No se pudo aceptar el intercambio")
-            alert("Intercambio aceptado")
+            return "Intercambio realizado con exito"
+        } catch (err) {
+            return err
+        }
+    }
+    static async handleEliminarIntercambio(id: number) {
+        try {
+            const res = await fetch(API_URL_BASE + `/pokemon/gts/cancelar?id=${id}`, {
+                method: "GET",
+            })
+
+            if (!res.ok) throw new Error("No se pudo aceptar el intercambio")
+            return 
         } catch (err) {
             alert(err)
         }
