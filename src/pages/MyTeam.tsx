@@ -5,10 +5,7 @@ import PokemonDetails from "../models/PokemonDetails"
 import PokemonService from "../services/pokemonService"
 import { useNavigate } from "react-router-dom"
 
-
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
-
-
 
 function UserTeam() {
 
@@ -104,6 +101,7 @@ function UserTeam() {
               >
                 Cerrar
               </button>
+
             </div>
           </div>
         )}
@@ -111,6 +109,7 @@ function UserTeam() {
         {team.length === 0 && !loading && !error && (
           <p className="text-center text-gray-500 mt-4">No tienes Pokémon en tu equipo.</p>
         )}
+        
       </div>
     </div>
   )

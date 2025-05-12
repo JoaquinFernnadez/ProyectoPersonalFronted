@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Article from "../models/News"
+import LoadingScreen from "../components/LoadingScreen"
 
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -39,10 +40,9 @@ function News() {
         <div className="container mx-auto p-4 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-1020">
             <h1 className="text-3xl text-white font-bold text-center mb-6">Últimas Noticias</h1>
             {loading ? (
-                <div className="text-center text-xl text-gray-600">Cargando noticias...</div>
+                <LoadingScreen/>
             ) : (
                 <>
-
                     {news.length === 0 ? (
                         <p className="text-center text-lg">No hay noticias disponibles en este momento.</p>
                     ) : (

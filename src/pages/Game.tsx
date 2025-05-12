@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import UserService from "../services/userService"
 import PokemonService from "../services/pokemonService"
 import { AnimatePresence, motion } from "framer-motion"
+import LoadingScreen from "../components/LoadingScreen"
 
 let stats: string[] = []
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
@@ -37,7 +38,6 @@ function Game() {
   const [showBattleAnimation, setShowBattleAnimation] = useState<boolean>(false)
 
 
-
   const fetchTeams = async () => {
     stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"]
     try {
@@ -59,13 +59,13 @@ function Game() {
   }
 
   // Esta funcion impone un tiempo minimo de carga, pero no lo alarga en caso de que por si mismo llegue al minimo
-
   const loadWithMinDelay = async () => {
-    const minDelay = new Promise(resolve => setTimeout(resolve, 2000))
     setLoadingTeams(true)
+    const minDelay = new Promise(resolve => setTimeout(resolve, 2000))
     await Promise.all([fetchTeams(), minDelay])
     setLoadingTeams(false)
   }
+
   useEffect(() => {
 
     loadWithMinDelay()
@@ -118,6 +118,7 @@ function Game() {
     }
 
   }
+
   const getUserValue = (pokemon: PokemonDetails2) => {
     const stats = PokemonService.getArrayFromStats(pokemon)
 
@@ -134,8 +135,8 @@ function Game() {
       }
     }
     return pokemon
-
   }
+
   const handleWinner = async () => {
     setStatsWasted.clear()
     setUserScore(0)
@@ -144,7 +145,6 @@ function Game() {
     setRound(1)
     setAiStat(0)
     setUserStat(0)
-
 
     if (win == true) {
       await fetch(API_URL_BASE + `/user/actualizarlvl?id=${UserId}`, {
@@ -167,7 +167,6 @@ function Game() {
         body: JSON.stringify({ level: 0 }),
         credentials: 'include'
       })
-
     }
   }
 
@@ -175,17 +174,13 @@ function Game() {
     navigate("/")
 
   }
-  const handleRetry = async () => {
-    await handleWinner()
-    setTimeout(async () => await fetchTeams(), 1000)
 
-    setLoading(false)
-  }
   const handleNextLevel = async () => {
     await handleWinner()
     setTimeout(async () => await fetchTeams(), 1000)
     setLoading(false)
   }
+  
   const abrirInfo = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect()
@@ -394,48 +389,14 @@ function Game() {
                   Salir
                 </button>
                 <button
-                  onClick={win ? handleNextLevel : handleRetry}
+                  onClick={handleNextLevel}
                   className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded text-white"
                 >
                   {win ? 'Siguiente Nivel' : 'Reintentar Juego'}
                 </button>
               </div>
             </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center text-white p-6 h-screen">
-
-              <img src="src/images/poketu.png" className="pb-15"></img>
-
-              {/* <div className="animate-spin rounded-full h-24 w-24 border-t-4 border-blue-500 mb-4"></div> */}
-              <img
-                src="src/images/pokeball2.png"
-                alt="Pokéball Spinner"
-                className="w-24 h-24 animate-spin mb-4 rounded-full"
-              />
-
-              <p className="text-xl mb-4 py-5 text-blue-400">Cargando nivel...</p>
-              <p className="text-xl mb-4  text-blue-400">(Boton de informacion arriba a la derecha)</p>
-
-              { /* God Animacion */}
-              <div className="flex justify-center items-center space-x-4 mb-4 pt-5">
-                <img
-                  src="src/images/1.png"
-                  alt="Pokémon"
-                  className="w-16 h-16 animate-ping"
-                />
-                <img
-                  src="src/images/4.png"
-                  alt="Pokémon"
-                  className="w-16 h-16 animate-ping"
-                />
-                <img
-                  src="src/images/7.png"
-                  alt="Pokémon"
-                  className="w-16 h-16 animate-ping"
-                />
-              </div>
-            </div>
-          )
+          ) : <LoadingScreen/>
         )}
       </div>
     </div>

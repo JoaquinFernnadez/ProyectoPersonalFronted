@@ -102,6 +102,7 @@ function Packs() {
 
       <AnimatePresence>
         {showCards && (
+        
           <motion.div
             className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-black bg-opacity-80 z-30 p-4"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -117,6 +118,7 @@ function Packs() {
                 </h3>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
                   {pokemons.map((pokemon, index) => (
                     <motion.div
                       key={index}
@@ -147,7 +149,6 @@ function Packs() {
                     </motion.div>
                   ))}
                 </div>
-
 
                 <button
                   onClick={handleClose}

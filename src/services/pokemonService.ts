@@ -46,7 +46,7 @@ export default class PokemonService {
     static async getId(url: string) {
         const response = await fetch(url)
         const data = await response.json() as Partial<PokemonDetails>
-        console.log(data)
+    
         return data.id
     }
     static async handleAceptarIntercambio(id: number, userId?: number) {
@@ -77,6 +77,5 @@ export default class PokemonService {
         } catch (err) {
             alert(err)
         }
-    }
-    
+    } 
 }

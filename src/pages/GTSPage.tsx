@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 import IntercambioAnimacion from "../components/IntercambioAnimacion";
 import AlertaFlotante from "../components/AlertaFlotante";
+import LoadingScreen from "../components/LoadingScreen";
 
 const GTSPage = () => {
     const { user } = useAuth()
@@ -15,9 +16,9 @@ const GTSPage = () => {
     const [intercambios, setIntercambios] = useState<Intercambio[]>([])
     const [mostrarAlerta, setMostrarAlerta] = useState(false)
     const [mensajeAlerta, setMensajeAlerta] = useState("")
+    const [mostrarAnimacion, setMostrarAnimacion] = useState(false)
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
     const [intercambioARealizar, setIntercambioARealizar] = useState<number | null>(null)
-    const [mostrarAnimacion, setMostrarAnimacion] = useState(false)
 
     const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
@@ -40,34 +41,24 @@ const GTSPage = () => {
         setMostrarAnimacion(true)
         setIntercambios((prev) => prev.filter((i) => i.id !== id))
     }
+
     const handleClickAceptar = async (id: number) => {
         setMostrarConfirmacion(true)
         setIntercambioARealizar(id)
     }
+
     const confirmarIntercambio = () => {
         handleIntercambio(intercambioARealizar || 0)
         setMostrarConfirmacion(false)
     }
+
     const cancelarIntercambio = () => {
         setMostrarConfirmacion(false)
         setIntercambioARealizar(null)
     }
 
     return loading ? (
-        <div className="flex flex-col items-center justify-center text-white p-6 h-screen">
-            <img src="src/images/poketu.png" className="pb-15" />
-            <img
-                src="src/images/pokeball2.png"
-                alt="Pokéball Spinner"
-                className="w-24 h-24 animate-spin mb-4 rounded-full"
-            />
-            <p className="text-xl mb-4 py-5 text-blue-400">Cargando GTS...</p>
-            <div className="flex justify-center items-center space-x-4 mb-4 pt-5">
-                <img src="src/images/1.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-                <img src="src/images/4.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-                <img src="src/images/7.png" alt="Pokémon" className="w-16 h-16 animate-ping" />
-            </div>
-        </div>
+        <LoadingScreen />
     ) : (
         <div className="p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full ">
             <h2 className="text-5xl font-bold text-green-400 mb-4 text-center pb-8 pt-10">GTS</h2>

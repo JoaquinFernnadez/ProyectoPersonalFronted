@@ -13,6 +13,7 @@ function UserList() {
   const [criterioOrden, setCriterioOrden] = useState('maxLevel')
 
   useEffect(() => {
+
     async function fetchUsers() {
       try {
         const userList = await fetchAPI(API_URL_BASE + `/user/bestScores`, {
@@ -34,7 +35,6 @@ function UserList() {
     fetchUsers()
   }, [])
 
-
    function handleOrdenChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const valor = e?.target.value
     setCriterioOrden(valor  )
@@ -54,13 +54,9 @@ function UserList() {
   const toggleOrden = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const valor = e.target.value
     setOrden(valor)
-   
   }
 
-
   if (loading) return <div>Loading...</div>
-
-
 
   return (
 
@@ -128,16 +124,12 @@ function UserList() {
                 <td className="px-6 py-4">
                   {user.pokePuntos}
                 </td>
-
-
               </tr>
             )}
-
           </tbody>
         </table>
       </div>
     </div>
-
   )
 }
 

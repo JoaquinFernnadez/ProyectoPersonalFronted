@@ -10,6 +10,7 @@ function Home() {
       <h1 className="flex text-blue-700 py-18 justify-center text-6xl">Bienvenido a PokeTu</h1>
 
       {user ? (<div className="flex flex-wrap justify-evenly px-20 text-white">
+        
         <HomeCard
           title="Game"
           description="Do you wanna test the strong of your team? Here u can see what level your team can reach"
@@ -44,7 +45,7 @@ function Home() {
 
         <HomeCard
           title="News"
-          description="Click here and stay informed about all the latest Pokémon news!"
+          description="Click here and stay informed about the latest Pokémon news!"
           image="src/images/pokenews.jpg"
           route="/news"
           gradient="from-blue-700 to-purple-700"
@@ -57,6 +58,7 @@ function Home() {
           route="/gts"
           gradient="from-purple-700 to-blue-700"
         />
+
       </div>
       ) : (
 
