@@ -20,11 +20,13 @@ function Packs() {
   const openPack = async () => {
     setIsOpening(true)
     setPokemons([])
-
+    console.log(`${API_URL_BASE}/pokemon/packs?id=${user?.id}`)
 
     setTimeout(async () => {
       setIsLoading(true)
+      
       try {
+        
         const response = await fetch(
           `${API_URL_BASE}/pokemon/packs?id=${user?.id}`,
           {
@@ -54,6 +56,7 @@ function Packs() {
 
   const fetchPuntos = async () => {
     const puntos = await UserService.getPokePuntos(user?.id || 0)
+    console.log(puntos)
     setPokePuntos(puntos)
   }
 

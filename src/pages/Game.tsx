@@ -190,7 +190,7 @@ function Game() {
   }
 
   return (
-    <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
+    <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full">
       <div className="game-container text-white ">
         {(!loading && !loadingTeams) ? (
           <div className="">

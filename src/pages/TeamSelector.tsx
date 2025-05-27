@@ -87,7 +87,7 @@ function Team() {
   if (error) return <p className="text-center text-red-500">{error}</p>
 
   return (
-    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full">
+    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full">
       <div className=" text-white flex flex-col items-center p-6">
         <h2 className="text-2xl font-bold mb-4">Selecciona tu equipo de 6 Pokémons</h2>
 

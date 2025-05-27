@@ -6,6 +6,7 @@ type AutoCompleteInputProps = {
     onChange: (value: string) => void
     listaDeOpciones: string[]
     color?: string
+    placeholder: string 
 }
 
 export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
@@ -13,6 +14,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
     onChange,
     listaDeOpciones,
     color = "text-white",
+    placeholder
 }) => {
     const [isFocused, setIsFocused] = useState(false);
 
@@ -34,7 +36,7 @@ export const AutoCompleteInput: React.FC<AutoCompleteInputProps> = ({
                 onBlur={() => setTimeout(() => setIsFocused(false), 200)}
                 onChange={(e) => onChange(e.target.value)}
                 className={`border rounded p-2 mr-2 bg-black border-gray-500 ${color}`}
-                placeholder="Nombre del Pokémon"
+                placeholder={placeholder}
             />
             {isFocused && opcionesFiltradas.length > 0 && (
                 <ul className="absolute z-10 w-full  bg-black border border-gray-300 rounded shadow mt-1 max-h-40 overflow-y-auto">

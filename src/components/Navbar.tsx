@@ -31,6 +31,9 @@ function Navbar() {
               <Link to="/users" className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Ranking</Link>
             </li>
             <li>
+              <Link to="/news" className="block py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">News</Link>
+            </li>
+            <li>
               <button onClick={abrirModal} className="block cursor-pointer py-2 px-3 text-white  bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Logout</button>
             </li>
             <li>

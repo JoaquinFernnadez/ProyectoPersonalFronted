@@ -1,32 +1,46 @@
+// src/services/SocketGameService.ts
 import socket from '../sockets/socket'
 import { GameEnd, GameUpdate, joinedGame, TurnData } from "../models/Game"
 
-
 export class SocketGameService {
   connect() {
-    if (!socket.connected) {
+    if(!socket.connected){
       socket.connect()
     }
+    socket.on("connect", () => {
+      console.log("Socket conectado desde frontend:", socket.id)
+    })
+
+    socket.on("connect_error", (err) => {
+      console.error("Error de conexión de socket:", err)
+    })
+
+    // Puedes agregar un log para verificar eventos recibidos
+    socket.onAny((event, ...args) => {
+      console.log(`📩 Evento recibido: ${event}`, args)
+    })
   }
 
   disconnect() {
     socket.disconnect()
   }
 
-  //  EMITS
-  createGame(password?: string) {
-    socket.emit('create-game', password)
+  // -------- EMITS --------
+  createGame(password: string, userId: number) {
+     console.log("📡 Socket conectado:", socket.connected)
+    socket.emit('create-game', password, userId)
+    console.log("📤 Emitiendo create-game:", password, userId)
   }
 
-  joinGame(gameId: number, password?: string) {
-    socket.emit('join-game', gameId, password)
+  joinGame(gameId: number, player2Id: number, password?: string) {
+    socket.emit('join-game', gameId,player2Id, password)
   }
 
   sendTurn(turnData: TurnData) {
     socket.emit('game-update', turnData)
   }
 
-  //  LISTENERS (ON)
+  // -------- LISTENERS --------
   onJoinedGame(callback: (data: joinedGame) => void) {
     socket.on('join-game', callback)
   }
@@ -39,11 +53,16 @@ export class SocketGameService {
     socket.on('game-ended', callback)
   }
 
-  //  Limpiar listeners
+  // -------- Limpiar listeners --------
   removeAllListeners() {
     socket.off('join-game')
     socket.off('game-update')
     socket.off('game-ended')
+  }
+
+  // -------- Test de conexión --------
+  testPing() {
+    socket.emit('ping-test', 'Hola desde frontend')
   }
 }
 

@@ -78,4 +78,9 @@ export default class PokemonService {
             alert(err)
         }
     } 
+    static async getPlayer1Id(gameId: number) {
+        const response = await fetch(API_URL_BASE + `/pokemon/player1Id?id=${gameId}`)
+        const id = await response.json()
+        return id
+    }
 }

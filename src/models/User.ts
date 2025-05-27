@@ -6,6 +6,7 @@ export default interface User{
     password: string
     pokePuntos: number
     role: string
+    wins: number
     accepNotifications?: boolean
 }
 

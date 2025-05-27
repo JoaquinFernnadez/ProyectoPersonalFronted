@@ -20,6 +20,8 @@ const GTSManagement = () => {
     const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false)
     const [intercambioAEliminar, setIntercambioAEliminar] = useState<number | null>(null)
 
+    const [pokemonsOfrecer, setPokemonsOfrecer] = useState<string[]>([])
+
     const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
     const fetchIntercambios = async () => {
@@ -40,6 +42,9 @@ const GTSManagement = () => {
     const cargarDatos = async () => {
         const data = await fetch(API_URL_BASE + '/pokemon/listPokeNames')
         const pokemons = await data.json()
+        const myData =  await fetch(API_URL_BASE + `/pokemon/listMyNames?id=${user?.id}`)
+        const myPokemons = await myData.json()
+        setPokemonsOfrecer(myPokemons)
         setListaDePokemon(pokemons)
     }
 
@@ -113,14 +118,16 @@ const GTSManagement = () => {
                 <AutoCompleteInput
                     value={pokemonOfrecido}
                     onChange={setPokemonOfrecido}
-                    listaDeOpciones={listaDePokemon}
+                    listaDeOpciones={pokemonsOfrecer}
                     color="text-red-300"
+                    placeholder= "Nombre del Pokemon"
                 />
                 <AutoCompleteInput
                     value={pokemonDeseado}
                     onChange={setPokemonDeseado}
                     listaDeOpciones={listaDePokemon}
                     color="text-green-400"
+                    placeholder= "Nombre del Pokemon"
                 />
                 <button
                     onClick={handleCrearIntercambio}

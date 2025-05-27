@@ -9,7 +9,7 @@ import PokemonDetails from "../models/PokemonDetails"
 import { GameEnd, GameUpdate } from "../models/Game"
 import EndGameScreen from "../components/EndGameScreen"
 
-const API_URL_BASE = import.meta.env.VITE_API_URL
+
 
 interface MultiplayerProps {
     players?: {
@@ -17,12 +17,15 @@ interface MultiplayerProps {
         player2Id: number
     }
     gameId?: number
+    url?: string
 }
 
 const stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"]
 const setStatsWasted = new Set()
 
-function Multiplayer({ players, gameId }: MultiplayerProps) {
+function Multiplayer({ players, gameId, url}: MultiplayerProps) {
+
+    
 
     const { user } = useAuth()
 
@@ -41,6 +44,8 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
     const [enemySelection, setEnemySelection] = useState<SalidaDatabase>()
     const [turn, setTurn] = useState<number>(1)
 
+    const[myId, setMyId] = useState<number>()
+
     const [myIndex, setMyIndex] = useState<number>(0)
 
     const [gameWinner, setGameWinner] = useState<string>()
@@ -51,21 +56,24 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
 
     const fetchTeams = async () => {
         const myId = user?.id
+        setMyId(myId) 
+       
         const enemyId = (user?.id === players?.player1Id) ? players?.player2Id : players?.player1Id
         try {
-
-            const userResponse = await fetch(API_URL_BASE + `/pokemon/verEquipo?id=${myId}`)
+            console.log(url + `/pokemon/verEquipo?id=${myId}`)
+            const userResponse = await fetch(url + `/pokemon/verEquipo?id=${myId}`)
             const userTeam = await userResponse.json()
             setMyTeam(userTeam)
 
-            const enemyResponse = await fetch(API_URL_BASE + `/pokemon/verEquipo?id=${enemyId}`)
+            const enemyResponse = await fetch(url + `/pokemon/verEquipo?id=${enemyId}`)
             const enemyteam = await enemyResponse.json()
             setEnemyTeam(enemyteam)
 
             setLoading(false)
 
         } catch (error) {
-            console.error("Error al cargar los equipos", error)
+            console.error(error instanceof Error ? error.message : "ns q pasa qui")
+            
         }
     }
     const getMyIndex = () => {
@@ -73,11 +81,14 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
         setMyIndex(playerIndex)
     }
 
-    useEffect(() => {
+    useEffect(() => { 
         getMyIndex()
         fetchTeams()
         socketGameService.connect()
         socketGameService.onGameUpdate(async function gestionarDatos(newData: GameUpdate) {
+            console.log(newData) // Solo para comprobaciones 
+            setSelectedStat(stats[newData.round.selectedStat as number])
+            setSelectedStatIndex(newData.round.selectedStat as number)
             if (turn === 2) {
                 setShowBattleAnimation(true)
                 setTimeout(() => {
@@ -110,7 +121,7 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
             }
         })
         socketGameService.onGameEnd(async function gestionarFinal(newData: GameEnd) {
-            console.log(newData)
+            console.log(newData) // Solo para comprobaciones 
             setGameWinner(newData.finalGameState.winner || "vacio")
         })
         return () => {
@@ -149,7 +160,7 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
     if (gameWinner) return <EndGameScreen team={myTeam} iWin={myScore > 1 ? true : false}/>
 
     return (
-        <>
+        <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full">
             {loading ? <LoadingScreen />
                 : (
                     <div className="">
@@ -163,7 +174,7 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
                                                 <img src={pokemon.sprite} alt={pokemon.pokemon.name} className="w-24 h-24" />
                                             </button>
                                             <h1></h1>
-                                            <button onClick={() => handleSelectedPokemon(pokemon)} disabled={jugar !== true || turn !== myIndex} className="mt-2 align-bottom p-1 bg-blue-600 text-white rounded-3xl ">
+                                            <button onClick={() => handleSelectedPokemon(pokemon)} disabled={jugar !== true || turn !== myIndex} className="mt-2 align-bottom p-1 cursor-pointer bg-blue-600 text-white rounded-3xl ">
                                                 Choose
                                             </button>
                                         </div>
@@ -182,7 +193,7 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
                                     ? `My : ${myStat} ----  Enemy : ${enemyStat}`
                                     : "\u00A0"
                             }</p>
-                            <button disabled={!(!selectedStat)} className="text-green-400" onClick={getRandomStat}>Play</button>
+                            <button disabled={!(!selectedStat) || myId == players?.player2Id} className="text-green-400 cursor-pointer" onClick={getRandomStat}>Play</button>
                         </div>
 
                         <div className="team">
@@ -265,7 +276,7 @@ function Multiplayer({ players, gameId }: MultiplayerProps) {
                     </div>
                 )
             }
-        </>
+        </div>
     )
 }
 

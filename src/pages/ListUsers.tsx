@@ -40,7 +40,7 @@ function UserList() {
     setCriterioOrden(valor  )
     let auxUsers: User[] = []
 
-    if (valor === "pokePuntos") auxUsers = ([...users].sort((a, b) => b.pokePuntos - a.pokePuntos))
+    if (valor === "wins") auxUsers = ([...users].sort((a, b) => b.wins - a.wins))
       else if (valor  === "maxLevel") auxUsers = ([...users].sort((a, b) => b.maxLevel - a.maxLevel))
       else auxUsers = ([...users].sort((a, b) => b.id - a.id))
 
@@ -68,18 +68,18 @@ function UserList() {
         <div className='flex'>
         <select
           id="orden"
-          className="block w-35 px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="block w-35 px-4 py-2 border border-gray-300 bg-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           onChange={(e) => handleOrdenChange(e)}
           value={criterioOrden}
         >
           <option value="maxLevel">MaxLevel</option>
-          <option value="pokePuntos">PokePuntos</option>
+          <option value="wins">Wins</option>
           <option value="id">ID</option>
         </select>
 
         <select
           onChange={toggleOrden}
-          className="block w-35 px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="block w-35 px-4 py-2 border border-gray-300 bg-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="desc">Descendente</option>
           <option value="asc">Ascendente</option>
@@ -103,7 +103,7 @@ function UserList() {
                 MaxLevel
               </th>
               <th scope="col" className="px-6 py-3 ">
-                PokePuntos
+                Wins
               </th>
 
             </tr>
@@ -122,7 +122,7 @@ function UserList() {
                   {user.maxLevel}
                 </td>
                 <td className="px-6 py-4">
-                  {user.pokePuntos}
+                  {user.wins}
                 </td>
               </tr>
             )}

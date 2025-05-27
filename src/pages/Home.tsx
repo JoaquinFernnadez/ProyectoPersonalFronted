@@ -44,10 +44,10 @@ function Home() {
         />
 
         <HomeCard
-          title="News"
-          description="Click here and stay informed about the latest Pokémon news!"
+          title="Multiplayer"
+          description="Click here and play with other Pokemon trainers to become the best"
           image="src/images/pokenews.jpg"
-          route="/news"
+          route="/multiplayer"
           gradient="from-blue-700 to-purple-700"
         />
 

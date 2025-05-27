@@ -54,7 +54,7 @@ function UserTeam() {
               <img src={pokemon.sprite} className="w-24 h-24 mx-auto" />
               <p className="text-white mt-2 font-semibold">{pokemon.pokemonName}</p>
               <button
-                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
                 onClick={async () => setSelectedPokemon(await PokemonService.fetchPokemonDetails(pokemon.id))}
               >
                 Ver detalles
@@ -64,7 +64,8 @@ function UserTeam() {
 
         </div>
         <div className="flex justify-center pt-10">
-          <button className=" rounded-2xl cursor-pointer py-2 px-2 text-white bg-gradient-to-br from-purple-700  to-blue-700 " onClick={() => navigate('/team')}>Cambiar Equipo</button>
+          <button className=" rounded-2xl cursor-pointer py-2 px-2 text-white bg-gradient-to-br from-purple-700  to-blue-700 " onClick={() => navigate('/team')}>
+            {team.length == 6 ? "Cambiar Equipo" : "Seleccionar Equipo"}</button>
         </div>
 
         {selectedPokemon && (

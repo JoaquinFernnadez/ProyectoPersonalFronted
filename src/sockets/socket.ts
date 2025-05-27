@@ -1,10 +1,9 @@
-import { io, Socket } from 'socket.io-client'
+import { io } from "socket.io-client"
 
-const URL = import.meta.env.VITE_SOCKET_URL
-
-const socket: Socket = io(URL, {
-  autoConnect: false, // conectamos manualmente cuando lo necesitemos
-  transports: ['websocket'],
+const socket = io("http://localhost:3000", {
+    autoConnect: false,
+    withCredentials: true,
+    transports: ["websocket"]
 })
 
 export default socket

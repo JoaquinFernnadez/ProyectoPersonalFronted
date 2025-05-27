@@ -39,7 +39,7 @@ const GTSPage = () => {
         setMensajeAlerta(msj)
         setMostrarAlerta(true)
         setMostrarAnimacion(true)
-        setIntercambios((prev) => prev.filter((i) => i.id !== id))
+
     }
 
     const handleClickAceptar = async (id: number) => {
@@ -89,7 +89,10 @@ const GTSPage = () => {
                             <IntercambioAnimacion
                                 pokemonSalida={intercambio.pokemonDeseado.sprite}
                                 pokemonEntrada={intercambio.pokemonOfrecido.sprite}
-                                onDone={() => setMostrarAnimacion(false)}
+                                onDone={() => {
+                                    setMostrarAnimacion(false)
+                                    setIntercambios((prev) => prev.filter((i) => i.id !== intercambio.id))
+                                }}
                             />
                         )}
                     </div>
@@ -104,7 +107,7 @@ const GTSPage = () => {
                         exit={{ opacity: 0 }}
                     >
                         <motion.div
-                            className="bg-gray-200 p-6 rounded shadow-xl text-center"
+                            className="bg-gray-300 p-6 rounded shadow-xl text-center"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.8, opacity: 0 }}
