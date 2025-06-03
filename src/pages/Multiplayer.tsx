@@ -10,7 +10,10 @@ import { GameEnd, GameUpdate } from "../models/Game"
 import EndGameScreen from "../components/EndGameScreen"
 
 
-
+/* interface stat {
+    stat: string
+    index: number
+} */
 interface MultiplayerProps {
     players?: {
         player1Id: number
@@ -23,17 +26,17 @@ interface MultiplayerProps {
 const stats = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"]
 const setStatsWasted = new Set()
 
-function Multiplayer({ players, gameId, url}: MultiplayerProps) {
+function Multiplayer({ players, gameId, url }: MultiplayerProps) {
 
-    
+
 
     const { user } = useAuth()
 
     const [myTeam, setMyTeam] = useState<SalidaDatabase[]>([])
     const [enemyTeam, setEnemyTeam] = useState<SalidaDatabase[]>([])
 
-    const [myScore, setMyScore] = useState<number>(0)
-    const [enemyScore, setEnemyScore] = useState<number>(0)
+    const [player1Score, setplayer1Score] = useState<number>(0)
+    const [player2Score, setPlayer2Score] = useState<number>(0)
     const [round, setRound] = useState<number>(1)
     const [myStat, setMyStat] = useState<number | null>(null)
     const [enemyStat, setEnemyStat] = useState<number | null>(null)
@@ -41,10 +44,12 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
     const [selectedStatIndex, setSelectedStatIndex] = useState<number>(0)
     const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null)
     const [jugar, setJugar] = useState<boolean>(false)
-    const [enemySelection, setEnemySelection] = useState<SalidaDatabase>()
+    const [enemySelection, setEnemySelection] = useState<SalidaDatabase | null>()
     const [turn, setTurn] = useState<number>(1)
 
-    const[myId, setMyId] = useState<number>()
+    const [imPlayer1, setImPlayer1] = useState<boolean>(true)
+
+    const [myId, setMyId] = useState<number>()
 
     const [myIndex, setMyIndex] = useState<number>(0)
 
@@ -56,11 +61,10 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
 
     const fetchTeams = async () => {
         const myId = user?.id
-        setMyId(myId) 
-       
+        setMyId(myId)
+
         const enemyId = (user?.id === players?.player1Id) ? players?.player2Id : players?.player1Id
         try {
-            console.log(url + `/pokemon/verEquipo?id=${myId}`)
             const userResponse = await fetch(url + `/pokemon/verEquipo?id=${myId}`)
             const userTeam = await userResponse.json()
             setMyTeam(userTeam)
@@ -73,51 +77,73 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
 
         } catch (error) {
             console.error(error instanceof Error ? error.message : "ns q pasa qui")
-            
+
         }
     }
     const getMyIndex = () => {
         const playerIndex = (players?.player1Id === user?.id) ? 1 : 2
         setMyIndex(playerIndex)
     }
+    const setPlayer = async () => {
+        const player1id = await PokemonService.getPlayer1Id(gameId || 0)
+        console.log(player1id, user?.id)
+        if (user?.id !== player1id) {
+            setImPlayer1(false)
+        } else {
+            setImPlayer1(true)
+        }
+        console.log(imPlayer1)
+    }
+    useEffect(() => {
+        console.log('Actualizó imPlayer1:', imPlayer1)
+    }, [imPlayer1])
 
-    useEffect(() => { 
+    useEffect(() => {
         getMyIndex()
         fetchTeams()
+        setPlayer()
         socketGameService.connect()
+        socketGameService.onStatSelected(function statSelection(stat: string, index: number) {
+            setStatInfo(stat, index)
+        })
         socketGameService.onGameUpdate(async function gestionarDatos(newData: GameUpdate) {
-            console.log(newData) // Solo para comprobaciones 
-            setSelectedStat(stats[newData.round.selectedStat as number])
-            setSelectedStatIndex(newData.round.selectedStat as number)
-            if (turn === 2) {
-                setShowBattleAnimation(true)
-                setTimeout(() => {
-                    setShowBattleAnimation(false)
-                    setSelectedStat("")
-                    setJugar(false)
-                }, 3000)
-            }
+            console.log("LLega la info del update ", newData) // Solo para comprobaciones 
+            setPlayer()
+            
             setTurn(newData.gameUpdated.currentTurn)
             if (newData.round.player1Choice) {
                 if (players?.player1Id == user?.id) {
                     setMyStat(newData.round.player1Choice.stat)
-                    if (newData.round.player2Choice) {
+                    if (newData.round.player2Choice?.pokeId != 0 && newData.round.player2Choice != undefined) {
                         setEnemyStat(newData.round.player2Choice.stat)
                         setEnemySelection(await PokemonService.fetchPokemonDetails(newData.round.player2Choice?.pokeId))
                     }
                 } else {
                     setEnemyStat(newData.round.player1Choice.stat)
                     setEnemySelection(await PokemonService.fetchPokemonDetails(newData.round.player1Choice?.pokeId))
-                    if (newData.round.player2Choice) {
+                    if (newData.round.player2Choice?.pokeId != 0 && newData.round.player2Choice != undefined) {
                         setMyStat(newData.round.player2Choice.stat)
                     }
                 }
             }
-            setRound(prev => prev + 1)
-            if (newData.round.winner == "player1") {
-                setMyScore(prev => prev + 1)
-            } else {
-                setEnemyScore(prev => prev + 1)
+            if (newData.round.winner !== null) {
+                setShowBattleAnimation(true)
+                setTimeout(() => {
+                    setShowBattleAnimation(false)
+                    setSelectedStat("")
+                    setJugar(false)
+                    setEnemySelection(null)
+                    setMyStat(null)
+                    setEnemyStat(null)
+                }, 3000)
+                setRound(prev => prev + 1)
+                
+                if (newData.round.winner == "player1") {
+                    setplayer1Score(prev => prev + 1)
+                } else {
+                    setPlayer2Score(prev => prev + 1)
+                    
+                }
             }
         })
         socketGameService.onGameEnd(async function gestionarFinal(newData: GameEnd) {
@@ -133,9 +159,15 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
     const getRandomStat = () => {
         const index = Math.floor(Math.random() * stats.length)
         const randomStat = stats[index]
-        setSelectedStat(randomStat)
+        socketGameService.statSelection(randomStat, index)
+        console.log(randomStat, index)
+        setStatInfo(randomStat, index)
+    }
+    const setStatInfo = (stat: string, index: number) => {
+
+        setSelectedStat(stat)
         stats.splice(index, 1)
-        setStatsWasted.add(randomStat)
+        setStatsWasted.add(stat)
         setSelectedStatIndex(index)
         setJugar(true)
     }
@@ -151,13 +183,13 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
             turn,
             choice: pokemon.id,
             roundNumber: round,
-            selectedStat: selectedStatIndex
+            selectedStat: Math.floor(selectedStatIndex)
         }
         socketGameService.sendTurn(data)
         console.log(data)
 
     }
-    if (gameWinner) return <EndGameScreen team={myTeam} iWin={myScore > 1 ? true : false}/>
+    if (round === 4 || gameWinner) return <EndGameScreen team={myTeam} iWin={(imPlayer1) ? (player1Score >= 2 ? true : false) : (player1Score >= 2 ? false : true) } />
 
     return (
         <div className="items-center bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full">
@@ -183,21 +215,21 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
                             </div>
                         </div>
 
-                        <p className="pt-5 px-80 text-blue-400">Tu Puntuación: {myScore}</p>
+                        <p className="pt-5 px-80 text-blue-400">Tu Puntuación: {(imPlayer1) ? player1Score : player2Score}</p>
 
                         <div className="round-info text-center text-3xl py-6">
                             <h2 className="py-2 text-green-400">Ronda {round}</h2>
                             <p className="py-2 text-green-400">{selectedStat
                                 ? `Stat seleccionada: ${selectedStat}`
                                 : (myStat && enemyStat)
-                                    ? `My : ${myStat} ----  Enemy : ${enemyStat}`
+                                    ? `My : ${myStat}  ----  Enemy : ${enemyStat}`
                                     : "\u00A0"
                             }</p>
                             <button disabled={!(!selectedStat) || myId == players?.player2Id} className="text-green-400 cursor-pointer" onClick={getRandomStat}>Play</button>
                         </div>
 
                         <div className="team">
-                            <p className="text-right text-red-400 px-80">Puntuación del Rival: {enemyScore}</p>
+                            <p className="text-right text-red-400 px-80">Puntuación del Rival: {(imPlayer1) ? player2Score : player1Score}</p>
                             <h2 className="text-center text-red-400 text-4xl py-4">Equipo rival</h2>
 
                             <div className="pokemon-list flex justify-center gap-4 flex-wrap">
@@ -233,10 +265,6 @@ function Multiplayer({ players, gameId, url}: MultiplayerProps) {
                                             <p className="mt-2">Enemy</p>
                                             <p className="text-2xl">{enemyStat}</p>
                                         </div>
-                                    </div>
-
-                                    <div className="mt-6 text-2xl">
-                                        Stat: <span className="capitalize text-yellow-300">{selectedStat}</span>
                                     </div>
 
                                     <motion.div
