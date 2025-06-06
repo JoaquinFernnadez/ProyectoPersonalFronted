@@ -197,7 +197,7 @@ function Game() {
             <h1 className="text-center py-5">¡Bienvenido al Juego Pokémon! Estas en el nivel {level}</h1>
             <div className="flex justify-end" >
               <button className="pr-10" ref={buttonRef} onClick={() => abrirInfo()}>
-                <img className="rounded-full w-10 h-10" src="src/images/infoIcon.jpg"></img>
+                <img className="rounded-full w-10 h-10" src="/src/images/infoIcon.jpg"></img>
               </button>
             </div>
             <div className="teams">

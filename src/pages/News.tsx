@@ -37,7 +37,8 @@ function News() {
 
 
     return (
-        <div className="container mx-auto p-4 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-1020 w-full">
+        <div className="  p-4 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-1020 w-full"> 
+        <div className="container  p-4  min-h-1020 w-full">
             <h1 className="text-3xl text-white font-bold text-center mb-6">Últimas Noticias</h1>
             {loading ? (
                 <LoadingScreen/>
@@ -82,6 +83,7 @@ function News() {
                     )}
                 </>
             )}
+        </div>
         </div>
     )
 }

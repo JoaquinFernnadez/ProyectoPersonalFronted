@@ -7,7 +7,8 @@ function Home() {
 
   return (
     <div className="text-white flex-wrap  bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-screen">
-      <h1 className="flex text-blue-700 py-18 justify-center text-6xl">Bienvenido a PokeTu</h1>
+      
+      <div className="flex justify-center items-center"><img src= "src/images/poketu.png" className="py-10"></img></div>
 
       {user ? (<div className="flex flex-wrap justify-evenly px-20 text-white">
         

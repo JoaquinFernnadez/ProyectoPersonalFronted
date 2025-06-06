@@ -24,9 +24,9 @@ function Packs() {
 
     setTimeout(async () => {
       setIsLoading(true)
-      
+
       try {
-        
+
         const response = await fetch(
           `${API_URL_BASE}/pokemon/packs?id=${user?.id}`,
           {
@@ -70,13 +70,43 @@ function Packs() {
   }
 
   return (
-    <div className="relative flex flex-col items-center p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen w-full overflow-hidden">
-      <h2 className="text-2xl font-bold mb-4 text-white">Hazte con todos</h2>
+    <div className="relative flex flex-col items-center p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 h-screen z-10 w-full overflow-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
 
-      <div className="absolute top-4 right-4 flex flex-col items-end text-orange-500 z-20">
+        {/* Bulbasaur */}
+        <img src="/src/images/1.png" className="absolute top-10 left-10 w-28 opacity-60 blur-[1px]" />
+        <img src="/src/images/1.png" className="absolute bottom-20 right-1/4 w-24 opacity-60 blur-[1px]" />
+        <img src="/src/images/1.png" className="absolute top-1/4 left-1/3 w-20 opacity-60 blur-[1px]" />
+        <img src="/src/images/1.png" className="absolute bottom-1/3 left-16 w-24 opacity-60 blur-[1px]" />
+        <img src="/src/images/7.png" className="absolute top-1/8 left-1/5 w-22 opacity-60 blur-[1px]" />
+        <img src="/src/images/4.png" className="absolute bottom-1/5 right-1/3 w-20 opacity-60 blur-[1px]" />
+
+        {/* Charmander */}
+        <img src="/src/images/4.png" className="absolute bottom-16 left-1/4 w-32 opacity-60 blur-[1px]" />
+        <img src="/src/images/4.png" className="absolute top-24 right-40 w-28 opacity-60 blur-[1px]" />
+        <img src="/src/images/1.png" className="absolute top-1/3 left-3/4 w-20 opacity-60 blur-[1px]" />
+        <img src="/src/images/4.png" className="absolute bottom-1/4 right-20 w-24 opacity-60 blur-[1px]" />
+        <img src="/src/images/4.png" className="absolute top-1/6 left-2/5 w-22 opacity-60 blur-[1px]" />
+        <img src="/src/images/4.png" className="absolute bottom-1/2 left-1/5 w-20 opacity-60 blur-[1px]" />
+
+        {/* Squirtle */}
+        <img src="/src/images/7.png" className="absolute top-20 right-10 w-24 opacity-60 blur-[1px]" />
+        <img src="/src/images/1.png" className="absolute bottom-10 left-1/3 w-28 opacity-60 blur-[1px]" />
+        <img src="/src/images/7.png" className="absolute top-1/2 right-1/4 w-20 opacity-60 blur-[1px]" />
+        <img src="/src/images/7.png" className="absolute bottom-1/5 left-1/2 w-24 opacity-60 blur-[1px]" />
+        <img src="/src/images/7.png" className="absolute top-1/8 right-1/3 w-22 opacity-60 blur-[1px]" />
+        <img src="/src/images/7.png" className="absolute bottom-1/4 left-1/5 w-20 opacity-60 blur-[1px]" />
+
+      </div>
+
+
+    
+
+      <div className="absolute top-4 right-4 flex flex-col items-end text-orange-500 z-20 pt-5">
         <img className="w-10 rounded-3xl" src="src/images/pokeCoin.jpg" />
         <h3>{pokePuntos} PP</h3>
       </div>
+
 
 
       <motion.div
@@ -105,7 +135,7 @@ function Packs() {
 
       <AnimatePresence>
         {showCards && (
-        
+
           <motion.div
             className="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center bg-black bg-opacity-80 z-30 p-4"
             initial={{ opacity: 0, scale: 0.8 }}

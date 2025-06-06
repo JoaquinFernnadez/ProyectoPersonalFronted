@@ -97,7 +97,7 @@ function Pokedex() {
               <p className="text-white mt-2 font-semibold">{pokemon.name}</p>
               {pokemon.unlocked && (
                 <button
-                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                  className="cursor-pointer mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
                   onClick={async () => setSelectedPokemon(
                     await PokemonService.fetchPokemonDetails(
                       await PokemonService.getId(pokemon.url)
@@ -149,14 +149,14 @@ function Pokedex() {
         <div className="flex justify-between mt-6">
           <button
             onClick={() => handlePrevPage()}
-            className="px-4 py-2 bg-gray-800 text-white rounded-md"
+            className="px-4 py-2 bg-gray-800 text-white rounded-md cursor-pointer"
             disabled={page <= 1}
           >
             Anterior
           </button>
           <button
             onClick={() => handleNextPage()}
-            className="px-4 py-2 bg-gray-800 text-white rounded-md"
+            className="px-4 py-2 bg-gray-800 text-white rounded-md cursor-pointer"
             disabled={(page - 1) * 20 + pokemons.length > 1020}
           >
             Siguiente

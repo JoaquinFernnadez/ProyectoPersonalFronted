@@ -61,7 +61,7 @@ function Navbar() {
               <div className="flex justify-end gap-4">
                 <button
                   onClick={cerrarModal}
-                  className="px-4 py-2 text-white bg-red-600 rounded-md  hover:bg-red-700"
+                  className="px-4 py-2 text-white bg-red-600 rounded-md  hover:bg-red-700 cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -69,7 +69,7 @@ function Navbar() {
                   onClick={() => {
                     confirmarAccion()
                   }}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green- cursor-pointer"
                 >
                   Confirmar
                 </button>

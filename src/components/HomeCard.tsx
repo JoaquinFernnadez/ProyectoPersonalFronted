@@ -18,7 +18,7 @@ const HomeCard: React.FC<HomeCardProps> = ({ title, description, image, route, g
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-blue-700">
           {title}
         </h5>
-        <p className="mb-3 font-normal text-gray-700 dark:text-green-300">
+        <p className="mb-3 font-normal text-green-300">
           {description}
         </p>
         <button
