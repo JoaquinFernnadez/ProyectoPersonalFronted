@@ -149,14 +149,14 @@ function Pokedex() {
         <div className="flex justify-between mt-6">
           <button
             onClick={() => handlePrevPage()}
-            className="px-4 py-2 bg-gray-800 text-white rounded-md cursor-pointer"
+            className="px-4 py-2 bg-violet-700 hover:bg-violet-900 text-white rounded-md cursor-pointer"
             disabled={page <= 1}
           >
             Anterior
           </button>
           <button
             onClick={() => handleNextPage()}
-            className="px-4 py-2 bg-gray-800 text-white rounded-md cursor-pointer"
+            className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded-md cursor-pointer"
             disabled={(page - 1) * 20 + pokemons.length > 1020}
           >
             Siguiente
