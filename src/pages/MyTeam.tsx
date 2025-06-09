@@ -63,11 +63,13 @@ function UserTeam() {
           ))}
 
         </div>
-        <div className="flex justify-center pt-10">
-          <button className=" rounded-2xl cursor-pointer py-2 px-2 text-white bg-gradient-to-br from-purple-700  to-blue-700 " onClick={() => navigate('/team')}>
-            {team.length == 6 ? "Cambiar Equipo" : "Seleccionar Equipo"}</button>
-        </div>
-
+        
+          <div className="flex justify-center gap-x-20 pt-10 ">
+            <button className=" rounded-2xl cursor-pointer py-2 px-10 text-white bg-gradient-to-br from-purple-700  to-blue-700 " onClick={() => navigate('/')}>Volver</button>
+            <button className=" rounded-2xl cursor-pointer py-2 px-2 text-white bg-gradient-to-br from-purple-700  to-blue-700 " onClick={() => navigate('/team')}>
+              {team.length == 6 ? "Cambiar Equipo" : "Seleccionar Equipo"}</button>
+          </div>
+      
         {selectedPokemon && (
           <div className="fixed inset-0 bg-black/60  flex justify-center items-center">
             <div className=" bg-white/85 p-6 rounded-lg shadow-lg w-96">
@@ -110,7 +112,7 @@ function UserTeam() {
         {team.length === 0 && !loading && !error && (
           <p className="text-center text-gray-500 mt-4">No tienes Pokémon en tu equipo.</p>
         )}
-        
+
       </div>
     </div>
   )

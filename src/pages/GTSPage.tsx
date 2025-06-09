@@ -61,14 +61,15 @@ const GTSPage = () => {
         <LoadingScreen />
     ) : (
         <div className="p-6 bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full ">
-            <h2 className="text-5xl font-bold text-green-400 mb-4 text-center pb-8 pt-10">GTS</h2>
-
+            <h2 className="text-5xl font-bold text-green-400 mb-4 text-center pb-8 pt-10"></h2>
+            
             {/* Crear Intercambio */}
             <div className="mb-6 text-center pb-10">
                 <div className="flex justify-end  pb-6">
                     <button onClick={() => navigate("/management")} className="bg-green-600 hover:bg-green-800 cursor-pointer text-white rounded py-2 px-3">Tus Intercambios</button>
                 </div>
             </div>
+            
 
             {/* Mostrar Intercambios */}
             <div className=" gap-4 flex flex-wrap justify-evenly">

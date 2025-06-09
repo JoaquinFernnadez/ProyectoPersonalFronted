@@ -79,7 +79,7 @@ function Pokedex() {
   return (
     <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950  w-screen min-h-300" >
       <div className="max-w-5xl mx-auto p-6 flex flex-col ">
-        {<h1 className="text-6xl text-orange-500 font-bold text-center mb-6">Pokédex  Página {page} </h1>}
+        {/*<h1 className="text-6xl text-orange-500 font-bold text-center mb-6">Pokédex  Página {page} </h1>*/}
 
         {loading && <p className="text-center text-gray-500">Cargando Pokédex...</p>}
         {error && <p className="text-center text-red-500">{error}</p>}

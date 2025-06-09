@@ -127,7 +127,7 @@ function Packs() {
       <button
         onClick={openPack}
         disabled={isLoading || isOpening || showCards}
-        className="mt-6 px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition disabled:bg-gray-400 z-10"
+        className="mt-6 px-6 py-2 bg-blue-700 cursor-pointer text-white rounded-lg hover:bg-blue-800 transition disabled:bg-gray-400 z-10"
       >
         {isLoading || isOpening ? "Abriendo..." : "Abrir Sobre"}
       </button>
@@ -185,7 +185,7 @@ function Packs() {
 
                 <button
                   onClick={handleClose}
-                  className="mt-6 px-6 py-2  bg-red-600 text-white rounded-md hover:bg-red-700 shadow-md font-bold w-full font-mono"
+                  className="mt-6 px-6 py-2 cursor-pointer bg-red-600 text-white rounded-md hover:bg-red-700 shadow-md font-bold w-full font-mono"
                 >
                   Cerrar sobre
                 </button>

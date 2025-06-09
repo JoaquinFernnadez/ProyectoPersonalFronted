@@ -207,7 +207,7 @@ function Multiplayer({ players, gameId, url }: MultiplayerProps) {
                                                 <img src={pokemon.sprite} alt={pokemon.pokemon.name} className="w-24 h-24" />
                                             </button>
                                             <h1></h1>
-                                            <button onClick={() => handleSelectedPokemon(pokemon)} disabled={jugar !== true || turn !== myIndex} className="mt-2 align-bottom p-1 cursor-pointer hover:bg-blue-700 bg-blue-600 text-white rounded-3xl ">
+                                            <button onClick={() => handleSelectedPokemon(pokemon)} disabled={jugar !== true || turn !== myIndex || !selectedStat} className="mt-2 align-bottom p-1 cursor-pointer hover:bg-blue-700 bg-blue-600 text-white rounded-3xl ">
                                                 Choose
                                             </button>
                                         </div>
