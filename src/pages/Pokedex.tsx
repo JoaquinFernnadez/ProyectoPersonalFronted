@@ -113,8 +113,8 @@ function Pokedex() {
           <div className="fixed inset-0 bg-black/60  flex justify-center items-center">
             <div className=" bg-white/85 p-6 rounded-lg shadow-lg w-96 ">
               <h2 className="text-2xl font-bold pb-2">{(selectedPokemon.name).toUpperCase()}</h2>
-              <p>Altura: {selectedPokemon.height} dm</p>
-              <p>Peso: {selectedPokemon.weight} hg</p>
+              <p>Altura: {selectedPokemon.height / 10} m</p>
+              <p>Peso: {selectedPokemon.weight/ 10} Kg</p>
 
               <h3 className="mt-3 font-bold pt-2">Tipos :</h3>
               <ul>
@@ -149,14 +149,14 @@ function Pokedex() {
         <div className="flex justify-between mt-6">
           <button
             onClick={() => handlePrevPage()}
-            className="px-4 py-2 bg-violet-700 hover:bg-violet-900 text-white rounded-md cursor-pointer"
+            className="px-4 py-2  text-white bg-blue-700 hover:bg-blue-900 rounded-md cursor-pointer"
             disabled={page <= 1}
           >
             Anterior
           </button>
           <button
             onClick={() => handleNextPage()}
-            className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded-md cursor-pointer"
+            className="px-4 py-2  bg-violet-700 hover:bg-violet-900 text-white rounded-md cursor-pointer"
             disabled={(page - 1) * 20 + pokemons.length > 1020}
           >
             Siguiente
