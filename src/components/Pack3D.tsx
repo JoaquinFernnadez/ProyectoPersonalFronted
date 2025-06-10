@@ -30,10 +30,10 @@ import * as THREE from 'three'
 
 export default function Pack3D() {
   return (
-    <div className="w-[200px] h-[300px]">
+    <div className="w-[200px] h-[340px]">
       <Canvas shadows camera={{ position: [0, 0, 3] }}>
         <ambientLight intensity={0.6} />
-        <directionalLight position={[2, 2, 5]} intensity={1} castShadow />
+        <directionalLight position={[2, 2, 5]} intensity={2} castShadow />
         <SobrePlano />
         <OrbitControls enableZoom={false} />
       </Canvas>

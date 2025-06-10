@@ -22,7 +22,6 @@ function News() {
                     credentials: "include",
                 })
                 const data = await response.json()
-                console.log(data)
                 setNews(data)
             } catch (error) {
                 const msg = error instanceof Error ? error.message : 'Error desconocido'
