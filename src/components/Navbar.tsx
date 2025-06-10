@@ -12,7 +12,7 @@ function Navbar() {
 
   const confirmarAccion = () => {
     cerrarModal()
-    logout()
+    logout() 
     
   }
 

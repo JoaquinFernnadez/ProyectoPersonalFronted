@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import Complaint from "../models/Complaint"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext"
+
 
 const API_URL_BASE = import.meta.env.VITE_API_URL_BASE
 
 export default function ComplaintsList() {
-    const { user } = useAuth()
+    
     const navigate = useNavigate()
 
     const [error, setError] = useState(null as string | null)
@@ -16,7 +16,7 @@ export default function ComplaintsList() {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await fetch(API_URL_BASE+`/complaints/list?id=${user?.id}`, {
+        const response = await fetch(API_URL_BASE+`/complaints/list`, {
           method: "GET",
           credentials: "include",
         })
@@ -40,7 +40,8 @@ export default function ComplaintsList() {
   if (error) return <p className="text-center text-red-500">{error}</p>
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5  bg-orange-200 shadow-lg rounded-lg flex flex-col items-center">
+    <div className="bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-full">
+    <div className="max-w-xl mx-auto mt-10 p-5  bg-gray-200 shadow-lg rounded-lg flex flex-col items-center">
       <h2 className="text-2xl font-bold mb-4 text-center">Lista de Quejas</h2>
       {complaints.length === 0 ? (
         <p className="text-gray-500 text-center py-10">No hay quejas registradas.</p>
@@ -54,7 +55,8 @@ export default function ComplaintsList() {
           ))}
         </ul>
       )}
-        <button className="bg-green-700 h-10 w-30  rounded"    onClick={() => navigate('/newComplaint')}>Nueva Queja</button>
+        <button className="bg-green-500 hover:bg-green-700 h-10 w-30 cursor-pointer rounded"    onClick={() => navigate('/newComplaint')}>Añadir queja</button>
+    </div>
     </div>
   )
 }
