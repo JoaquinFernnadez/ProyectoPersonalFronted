@@ -6,7 +6,7 @@ function Home() {
   const { user } = useAuth()
 
   return (
-    <div className="text-white flex-wrap  bg-gradient-to-br from-purple-950 via-gray-900 to-blue-950 min-h-screen w-screen">
+    <div className="text-white flex-wrap  bg-gradient-to-bl from-purple-800 via-gray-900 to-blue-800 min-h-screen w-screen">
       
       <div className="flex justify-center items-center"><img src= "src/images/poketu.png" className="py-10"></img></div>
 
